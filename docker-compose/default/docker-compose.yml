@@ -23,11 +23,41 @@ services:
     networks:
       - fromzeroapi
 
+  authservice:
+    build: ../../Auth-Service   # carpeta donde está tu Dockerfile
+    container_name: authservice
+    ports:
+      - "9081:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
+
+  userservice:
+    build: ../../User-Service   # carpeta donde está tu Dockerfile
+    container_name: userservice
+    ports:
+      - "9082:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
+
   supportservice:
-    image: supportservice
+    build: ../../Support-Service   # carpeta donde está tu Dockerfile
     container_name: supportservice
     ports:
-      - "8080:8080"
+      - "9080:8080"
     depends_on:
       mysql:
         condition: service_healthy
@@ -38,16 +68,16 @@ services:
     networks:
       - fromzeroapi
 
-  authservice:
-    image: authservice
-    container_name: authservice
+  projectsservice:
+    build: ../../Project-Service   # carpeta donde está tu Dockerfile
+    container_name: projectservice
     ports:
-      - "8081:8081"
+      - "9083:8080"
     depends_on:
       mysql:
         condition: service_healthy
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projectsdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
     networks:
