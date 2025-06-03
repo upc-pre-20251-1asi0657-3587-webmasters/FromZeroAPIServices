@@ -13,5 +13,6 @@ import java.util.UUID;
 public interface DeveloperRepository extends JpaRepository<Developer, DeveloperId> {
     Optional<Developer> findByDeveloperId(DeveloperId developerId);
     Optional<Developer> findByDeveloperEmail(DeveloperEmail developerEmail);
+    boolean existsByDeveloperId(DeveloperId developerId);
     boolean existsByDeveloperEmail(DeveloperEmail developerEmail);
 }
