@@ -1,8 +1,7 @@
 package com.userservice.user.domain.model.aggregates;
 
 import com.userservice.user.domain.model.commands.CreateDeveloperCommand;
-import com.userservice.user.domain.model.valueobjects.DeveloperEmail;
-import com.userservice.user.domain.model.valueobjects.DeveloperId;
+import com.userservice.user.domain.model.valueobjects.*;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
@@ -17,7 +16,22 @@ public class Developer {
     private DeveloperId developerId;
 
     @Embedded
+    private DeveloperFirstName developerFirstName;
+
+    @Embedded
+    private DeveloperLastName developerLastName;
+
+    @Embedded
     private DeveloperEmail developerEmail;
+
+    @Embedded
+    private DeveloperDescription developerDescription;
+
+    @Embedded
+    private DeveloperPhone developerPhone;
+
+    @Embedded
+    private DeveloperCountry developerCountry;
 
     public Developer() { }
 
