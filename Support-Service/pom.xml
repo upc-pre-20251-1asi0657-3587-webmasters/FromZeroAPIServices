@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fromzero.backend</groupId>
-	<artifactId>fromZero-backend</artifactId>
+	<artifactId>Support-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>fromZero-backend</name>
+	<name>Support-Service</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
 	<licenses>
