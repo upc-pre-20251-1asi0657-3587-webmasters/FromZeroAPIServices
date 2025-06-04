@@ -1,7 +1,5 @@
 package com.example.projectservice.projects.interfaces.rest;
 
-
-import com.example.projectservice.deliverables.interfaces.acl.DeliverableContextFacade;
 import com.example.projectservice.projects.domain.model.aggregates.Framework;
 import com.example.projectservice.projects.domain.model.aggregates.ProgrammingLanguage;
 import com.example.projectservice.projects.domain.model.commands.CreateProjectCommand;
@@ -36,20 +34,17 @@ public class ProjectController {
     private final ProjectQueryService projectQueryService;
     private final ProgrammingLanguagesQueryService programmingLanguagesQueryService;
     private final FrameworksQueryService frameworksQueryService;
-    private final DeliverableContextFacade deliverableContextFacade;
     private final ProfileContextFacade profileContextFacade;
 
     public ProjectController(ProjectCommandService projectCommandService,
                              ProjectQueryService projectQueryService,
                              ProgrammingLanguagesQueryService programmingLanguagesQueryService,
                              FrameworksQueryService frameworksQueryService,
-                             DeliverableContextFacade deliverableContextFacade,
                              ProfileContextFacade profileContextFacade) {
         this.projectCommandService = projectCommandService;
         this.projectQueryService = projectQueryService;
         this.programmingLanguagesQueryService = programmingLanguagesQueryService;
         this.frameworksQueryService = frameworksQueryService;
-        this.deliverableContextFacade = deliverableContextFacade;
         this.profileContextFacade = profileContextFacade;
     }
 
