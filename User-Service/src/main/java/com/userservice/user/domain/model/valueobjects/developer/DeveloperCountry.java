@@ -1,4 +1,4 @@
-package com.userservice.user.domain.model.valueobjects;
+package com.userservice.user.domain.model.valueobjects.developer;
 
 public record DeveloperCountry(String developerCountry) {
     public DeveloperCountry() { this(null); }

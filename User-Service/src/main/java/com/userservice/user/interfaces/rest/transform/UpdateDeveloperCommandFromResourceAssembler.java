@@ -1,7 +1,7 @@
 package com.userservice.user.interfaces.rest.transform;
 
 import com.userservice.user.domain.model.commands.UpdateDeveloperCommand;
-import com.userservice.user.domain.model.valueobjects.*;
+import com.userservice.user.domain.model.valueobjects.developer.*;
 import com.userservice.user.interfaces.rest.resources.UpdateDeveloperResource;
 
 import java.util.UUID;
