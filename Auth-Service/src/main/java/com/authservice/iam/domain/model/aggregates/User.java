@@ -1,6 +1,7 @@
 package com.authservice.iam.domain.model.aggregates;
 
-import com.authservice.iam.domain.model.commands.SignUpCommand;
+import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
+import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -42,15 +43,15 @@ public class User {
 
     public User() {  }
 
-    public User(SignUpCommand signUpCommand, String userPassword) {
-        this.userEmail = signUpCommand.userEmail();
+    public User(SignUpDeveloperCommand signUpDeveloperCommand, String userPassword) {
+        this.userEmail = signUpDeveloperCommand.userEmail();
         this.userPassword = userPassword;
-        this.userRole = signUpCommand.userRole();
+        this.userRole = signUpDeveloperCommand.userRole();
     }
 
-    public User(SignUpCommand signUpCommand, String userPassword, String userRole) {
-        this.userEmail = signUpCommand.userEmail();
+    public User(SignUpEnterpriseCommand signUpEnterpriseCommand, String userPassword) {
+        this.userEmail = signUpEnterpriseCommand.userEmail();
         this.userPassword = userPassword;
-        this.userRole = userRole;
+        this.userRole = signUpEnterpriseCommand.userRole();
     }
 }

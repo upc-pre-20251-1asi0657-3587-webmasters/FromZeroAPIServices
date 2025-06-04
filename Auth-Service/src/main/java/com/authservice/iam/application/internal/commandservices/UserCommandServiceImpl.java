@@ -7,7 +7,8 @@ import com.authservice.iam.domain.exceptions.InvalidCredentialsException;
 import com.authservice.iam.domain.exceptions.UserAlreadyExistsException;
 import com.authservice.iam.domain.model.aggregates.User;
 import com.authservice.iam.domain.model.commands.SignInCommand;
-import com.authservice.iam.domain.model.commands.SignUpCommand;
+import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
+import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
 import com.authservice.iam.domain.services.UserCommandService;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.UserRepository;
@@ -34,18 +35,35 @@ public class UserCommandServiceImpl implements UserCommandService {
     }
 
     @Override
-    public Optional<User> handle(SignUpCommand signUpCommand) {
-        if (userRepository.existsByUserEmail(signUpCommand.userEmail())) {
-            throw new UserAlreadyExistsException(signUpCommand.userEmail());
+    public Optional<User> handle(SignUpDeveloperCommand signUpDeveloperCommand) {
+        if (userRepository.existsByUserEmail(signUpDeveloperCommand.userEmail())) {
+            throw new UserAlreadyExistsException(signUpDeveloperCommand.userEmail());
         }
 
-        var encodedPassword = hashingService.encode(signUpCommand.userPassword());
+        var encodedPassword = hashingService.encode(signUpDeveloperCommand.userPassword());
 
-        var user = new User(signUpCommand, encodedPassword);
+        var user = new User(signUpDeveloperCommand, encodedPassword);
 
         userRepository.save(user);
 
-        userProfileGateway.createUserProfile(user.getUserId(), signUpCommand.userEmail());
+        //userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+
+        return userRepository.findById(user.getUserId());
+    }
+
+    @Override
+    public Optional<User> handle(SignUpEnterpriseCommand signUpEnterpriseCommand) {
+        if (userRepository.existsByUserEmail(signUpEnterpriseCommand.userEmail())) {
+            throw new UserAlreadyExistsException(signUpEnterpriseCommand.userEmail());
+        }
+
+        var encodedPassword = hashingService.encode(signUpEnterpriseCommand.userPassword());
+
+        var user = new User(signUpEnterpriseCommand, encodedPassword);
+
+        userRepository.save(user);
+
+        //userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
 
         return userRepository.findById(user.getUserId());
     }

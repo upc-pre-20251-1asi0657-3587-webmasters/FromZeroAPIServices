@@ -1,4 +1,4 @@
-package com.userservice.user.domain.model.valueobjects;
+package com.userservice.user.domain.model.valueobjects.developer;
 
 import jakarta.persistence.Embeddable;
 

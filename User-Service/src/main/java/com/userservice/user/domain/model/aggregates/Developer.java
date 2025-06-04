@@ -2,7 +2,7 @@ package com.userservice.user.domain.model.aggregates;
 
 import com.userservice.user.domain.model.commands.CreateDeveloperCommand;
 import com.userservice.user.domain.model.commands.UpdateDeveloperCommand;
-import com.userservice.user.domain.model.valueobjects.*;
+import com.userservice.user.domain.model.valueobjects.developer.*;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;

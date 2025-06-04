@@ -2,6 +2,7 @@ package com.authservice.iam.infrastructure.clients;
 
 import com.authservice.iam.application.ports.output.UserProfileGateway;
 import com.authservice.iam.interfaces.messaging.events.CreateDeveloperRequest;
+import com.authservice.iam.interfaces.messaging.events.CreateEnterpriseRequest;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -17,8 +18,14 @@ public class UserProfileClient implements UserProfileGateway {
     }
 
     @Override
-    public void createUserProfile(UUID uuid, String email) {
+    public void createDeveloperProfile(UUID uuid, String email) {
         var request = new CreateDeveloperRequest(uuid, email);
         restTemplate.postForEntity("http://userservice:8082/api/v1/developers/new-developer", request, Void.class);
+    }
+
+    @Override
+    public void createEnterpriseProfile(UUID uuid, String email) {
+        var request = new CreateEnterpriseRequest(uuid, email);
+        restTemplate.postForEntity("http://userservice:8082/api/v1/developers/new-enterprise", request, Void.class);
     }
 }

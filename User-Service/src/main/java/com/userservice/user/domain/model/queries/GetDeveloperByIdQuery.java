@@ -1,8 +1,6 @@
 package com.userservice.user.domain.model.queries;
 
-import com.userservice.user.domain.model.valueobjects.DeveloperId;
-
-import java.util.UUID;
+import com.userservice.user.domain.model.valueobjects.developer.DeveloperId;
 
 public record GetDeveloperByIdQuery(DeveloperId developerId) {
 }

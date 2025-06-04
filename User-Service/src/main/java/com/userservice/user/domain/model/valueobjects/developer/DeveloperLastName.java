@@ -1,4 +1,4 @@
-package com.userservice.user.domain.model.valueobjects;
+package com.userservice.user.domain.model.valueobjects.developer;
 
 public record DeveloperLastName(String developerLastName) {
     public DeveloperLastName() { this(null); }
