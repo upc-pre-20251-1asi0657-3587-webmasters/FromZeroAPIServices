@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "/api/v1/developers", produces = MediaType.APPLICATION_JSON_VALUE)
-@Tag(name = "Developers", description = "Available Developers Endpoints")
+@Tag(name = "Developers", description = "Available developers endpoints")
 public class DevelopersController {
     private final DeveloperCommandService developerCommandService;
 
