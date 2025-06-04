@@ -21,6 +21,15 @@ public class TokenServiceImpl implements BearerTokenService {
     private int expirationDays;
 
     private SecretKey getSigningKey() {
+        if (secret == null || secret.isEmpty()) {
+            throw new IllegalArgumentException("Secret must not be empty");
+        }
+        if (secret.contains(" ")) {
+            throw new IllegalArgumentException("Secret must not contain spaces");
+        }
+        if (secret.length() < 32) {
+            throw new IllegalArgumentException("Secret must be at least 32 characters long");
+        }
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
     }
