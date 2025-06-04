@@ -9,10 +9,7 @@ import java.util.Collections;
 public class UserServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication app = new SpringApplication(UserServiceApplication.class);
-        app.setDefaultProperties(Collections.singletonMap("server.port", "8080"));  //Eso quitenlo solo lo puse para que no hayan conflictos con los puertos de mi PC
-        app.run(args);
-        //SpringApplication.run(UserServiceApplication.class, args);
+        SpringApplication.run(UserServiceApplication.class, args);
     }
 
 }
