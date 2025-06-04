@@ -49,7 +49,7 @@ public class WebSecurityConfiguration {
                 "/webjars/**"
         };
 
-        http.cors(configurer -> configurer.configurationSource(_ -> {
+        http.cors(configurer -> configurer.configurationSource(request -> {
             var cors = new CorsConfiguration();
             cors.setAllowedOrigins(List.of("*"));
             cors.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE"));

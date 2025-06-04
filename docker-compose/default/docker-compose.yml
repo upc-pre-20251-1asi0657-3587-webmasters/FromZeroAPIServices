@@ -1,0 +1,84 @@
+version: "3.8"
+
+networks:
+  fromzeroapi:
+    driver: bridge
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: webmaster123
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./initdb:/docker-entrypoint-initdb.d/
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-uroot", "-pwebmaster123", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - fromzeroapi
+
+  authservice:
+    build: ../../Auth-Service   # carpeta donde está tu Dockerfile
+    container_name: authservice
+    ports:
+      - "9081:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
+
+  userservice:
+    build: ../../User-Service   # carpeta donde está tu Dockerfile
+    container_name: userservice
+    ports:
+      - "9082:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usersdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
+
+  supportservice:
+    build: ../../Support-Service   # carpeta donde está tu Dockerfile
+    container_name: supportservice
+    ports:
+      - "9080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/supportticketsdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
+
+  projectsservice:
+    build: ../../Project-Service   # carpeta donde está tu Dockerfile
+    container_name: projectservice
+    ports:
+      - "9083:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projectsdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+    networks:
+      - fromzeroapi
