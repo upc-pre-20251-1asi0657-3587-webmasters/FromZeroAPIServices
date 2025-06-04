@@ -29,7 +29,7 @@ public class TokenServiceImpl implements BearerTokenService {
         var issuedAt = new Date();
         var expiration = DateUtils.addDays(issuedAt, expirationDays);
         var key = getSigningKey();
-        return Jwts.builder().subject(user.getUserEmail()).issuedAt(issuedAt).expiration(expiration).signWith(key).compact();
+        return Jwts.builder().subject(user.getUserId().toString()).issuedAt(issuedAt).expiration(expiration).signWith(key).compact();
     }
 
     @Override
