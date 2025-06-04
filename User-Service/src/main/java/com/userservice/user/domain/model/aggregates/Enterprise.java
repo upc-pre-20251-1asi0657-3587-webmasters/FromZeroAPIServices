@@ -1,6 +1,7 @@
 package com.userservice.user.domain.model.aggregates;
 
 import com.userservice.user.domain.model.commands.CreateEnterpriseCommand;
+import com.userservice.user.domain.model.commands.UpdateEnterpriseCommand;
 import com.userservice.user.domain.model.valueobjects.enterprise.*;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.EmbeddedId;
@@ -47,5 +48,18 @@ public class Enterprise {
     public Enterprise(CreateEnterpriseCommand createEnterpriseCommand) {
         this.enterpriseId = new EnterpriseId(createEnterpriseCommand.enterpriseId());
         this.enterpriseEmail = new EnterpriseEmail(createEnterpriseCommand.enterpriseEmail());
+    }
+
+    public Enterprise updateInformation(UpdateEnterpriseCommand updateEnterpriseCommand) {
+        this.enterpriseName = updateEnterpriseCommand.enterpriseName();
+        //this.enterpriseEmail = updateEnterpriseCommand.enterpriseEmail();
+        this.enterpriseDescription = updateEnterpriseCommand.enterpriseDescription();
+        this.enterpriseCountry = updateEnterpriseCommand.enterpriseCountry();
+        this.enterpriseRuc = updateEnterpriseCommand.enterpriseRuc();
+        this.enterprisePhone = updateEnterpriseCommand.enterprisePhone();
+        this.enterpriseWebsite = updateEnterpriseCommand.enterpriseWebsite();
+        this.enterpriseProfileImgUrl = updateEnterpriseCommand.enterpriseProfileImgUrl();
+        this.enterpriseSector = updateEnterpriseCommand.enterpriseSector();
+        return this;
     }
 }
