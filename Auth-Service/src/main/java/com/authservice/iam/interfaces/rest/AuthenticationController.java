@@ -1,14 +1,8 @@
 package com.authservice.iam.interfaces.rest;
 
 import com.authservice.iam.domain.services.UserCommandService;
-import com.authservice.iam.interfaces.rest.resources.AuthenticatedUserResource;
-import com.authservice.iam.interfaces.rest.resources.SignInResource;
-import com.authservice.iam.interfaces.rest.resources.SignUpDeveloperResource;
-import com.authservice.iam.interfaces.rest.resources.DeveloperResource;
-import com.authservice.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
-import com.authservice.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import com.authservice.iam.interfaces.rest.transform.SignUpDeveloperCommandFromResourceAssembler;
-import com.authservice.iam.interfaces.rest.transform.DeveloperResourceFromEntityAssembler;
+import com.authservice.iam.interfaces.rest.resources.*;
+import com.authservice.iam.interfaces.rest.transform.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -44,6 +38,21 @@ public class AuthenticationController {
         var developerEntity = developer.get();
         var developerResource = DeveloperResourceFromEntityAssembler.toResourceFromEntity(developerEntity);
         return new ResponseEntity<>(developerResource, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/sign-up/enterprise")
+    @Operation(summary = "Sign up a new enterprise", description = "Sign up a new enterprise with the provided data.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Enterprise created successfully."),
+            @ApiResponse(responseCode = "400", description = "Bad request.")
+    })
+    public ResponseEntity<EnterpriseResource> signUpEnterprise(@RequestBody SignUpEnterpriseResource signUpEnterpriseResource) {
+        var signUpEnterpriseCommand = SignUpEnterpriseCommandFromResourceAssembler.toCommandFromResource(signUpEnterpriseResource);
+        var enterprise = userCommandService.handle(signUpEnterpriseCommand);
+        if (enterprise.isEmpty()) return ResponseEntity.badRequest().build();
+        var enterpriseEntity = enterprise.get();
+        var enterpriseResource = EnterpriseResourceFromEntityAssembler.toResourceFromEntity(enterpriseEntity);
+        return new ResponseEntity<>(enterpriseResource, HttpStatus.CREATED);
     }
 
     @PostMapping("/sign-in")

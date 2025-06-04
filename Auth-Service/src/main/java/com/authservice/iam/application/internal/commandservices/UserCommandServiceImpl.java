@@ -2,12 +2,13 @@ package com.authservice.iam.application.internal.commandservices;
 
 import com.authservice.iam.application.internal.outboundservices.hashing.HashingService;
 import com.authservice.iam.application.internal.outboundservices.tokens.TokenService;
-import com.authservice.iam.application.ports.output.DeveloperProfileGateway;
+import com.authservice.iam.application.ports.output.UserProfileGateway;
 import com.authservice.iam.domain.exceptions.InvalidCredentialsException;
 import com.authservice.iam.domain.exceptions.UserAlreadyExistsException;
 import com.authservice.iam.domain.model.aggregates.User;
 import com.authservice.iam.domain.model.commands.SignInCommand;
 import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
+import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
 import com.authservice.iam.domain.services.UserCommandService;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.UserRepository;
@@ -23,14 +24,14 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final HashingService hashingService;
     private final TokenService tokenService;
 
-    private final DeveloperProfileGateway developerProfileGateway;
+    private final UserProfileGateway userProfileGateway;
 
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, DeveloperProfileGateway developerProfileGateway) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, UserProfileGateway userProfileGateway) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
-        this.developerProfileGateway = developerProfileGateway;
+        this.userProfileGateway = userProfileGateway;
     }
 
     @Override
@@ -45,7 +46,24 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        //developerProfileGateway.createDeveloperProfile(user.getUserId(), signUpDeveloperCommand.userEmail());
+        //userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+
+        return userRepository.findById(user.getUserId());
+    }
+
+    @Override
+    public Optional<User> handle(SignUpEnterpriseCommand signUpEnterpriseCommand) {
+        if (userRepository.existsByUserEmail(signUpEnterpriseCommand.userEmail())) {
+            throw new UserAlreadyExistsException(signUpEnterpriseCommand.userEmail());
+        }
+
+        var encodedPassword = hashingService.encode(signUpEnterpriseCommand.userPassword());
+
+        var user = new User(signUpEnterpriseCommand, encodedPassword);
+
+        userRepository.save(user);
+
+        //userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
 
         return userRepository.findById(user.getUserId());
     }
