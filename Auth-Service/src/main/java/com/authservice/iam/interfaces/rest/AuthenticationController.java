@@ -3,12 +3,12 @@ package com.authservice.iam.interfaces.rest;
 import com.authservice.iam.domain.services.UserCommandService;
 import com.authservice.iam.interfaces.rest.resources.AuthenticatedUserResource;
 import com.authservice.iam.interfaces.rest.resources.SignInResource;
-import com.authservice.iam.interfaces.rest.resources.SignUpResource;
-import com.authservice.iam.interfaces.rest.resources.UserResource;
+import com.authservice.iam.interfaces.rest.resources.SignUpDeveloperResource;
+import com.authservice.iam.interfaces.rest.resources.DeveloperResource;
 import com.authservice.iam.interfaces.rest.transform.AuthenticatedUserResourceFromEntityAssembler;
 import com.authservice.iam.interfaces.rest.transform.SignInCommandFromResourceAssembler;
-import com.authservice.iam.interfaces.rest.transform.SignUpCommandFromResourceAssembler;
-import com.authservice.iam.interfaces.rest.transform.UserResourceFromEntityAssembler;
+import com.authservice.iam.interfaces.rest.transform.SignUpDeveloperCommandFromResourceAssembler;
+import com.authservice.iam.interfaces.rest.transform.DeveloperResourceFromEntityAssembler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -31,19 +31,19 @@ public class AuthenticationController {
         this.userCommandService = userCommandService;
     }
 
-    @PostMapping("/sign-up")
-    @Operation(summary = "Sign up a new user", description = "Sign up a new user with the provided username, password, and roles.")
+    @PostMapping("/sign-up/developer")
+    @Operation(summary = "Sign up a new developer", description = "Sign up a new developer with the provided data.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "User created successfully."),
+            @ApiResponse(responseCode = "201", description = "Developer created successfully."),
             @ApiResponse(responseCode = "400", description = "Bad request.")
     })
-    public ResponseEntity<UserResource> signUp(@RequestBody SignUpResource signUpResource) {
-        var signUpCommand = SignUpCommandFromResourceAssembler.toCommandFromResource(signUpResource);
-        var user = userCommandService.handle(signUpCommand);
-        if (user.isEmpty()) return ResponseEntity.badRequest().build();
-        var userEntity = user.get();
-        var userResource = UserResourceFromEntityAssembler.toResourceFromEntity(userEntity);
-        return new ResponseEntity<>(userResource, HttpStatus.CREATED);
+    public ResponseEntity<DeveloperResource> signUpDeveloper(@RequestBody SignUpDeveloperResource signUpDeveloperResource) {
+        var signUpDeveloperCommand = SignUpDeveloperCommandFromResourceAssembler.toCommandFromResource(signUpDeveloperResource);
+        var developer = userCommandService.handle(signUpDeveloperCommand);
+        if (developer.isEmpty()) return ResponseEntity.badRequest().build();
+        var developerEntity = developer.get();
+        var developerResource = DeveloperResourceFromEntityAssembler.toResourceFromEntity(developerEntity);
+        return new ResponseEntity<>(developerResource, HttpStatus.CREATED);
     }
 
     @PostMapping("/sign-in")
