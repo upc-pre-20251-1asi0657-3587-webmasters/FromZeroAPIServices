@@ -6,6 +6,7 @@ import com.userservice.user.domain.services.DeveloperQueryService;
 import com.userservice.user.infrastructure.persistence.jpa.repositories.DeveloperRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -14,6 +15,11 @@ public class DeveloperQueryServiceImpl implements DeveloperQueryService {
 
     public DeveloperQueryServiceImpl(DeveloperRepository developerRepository) {
         this.developerRepository = developerRepository;
+    }
+
+    @Override
+    public List<Developer> handle() {
+        return developerRepository.findAll();
     }
 
     @Override
