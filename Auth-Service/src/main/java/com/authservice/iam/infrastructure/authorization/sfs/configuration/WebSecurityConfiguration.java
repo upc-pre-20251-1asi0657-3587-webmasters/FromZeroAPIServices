@@ -42,6 +42,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         var permittedRequestPatterns = new String[] {
                 "/api/v1/authentication/**",
+                "/api/v1/users/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/swagger-ui/**",
