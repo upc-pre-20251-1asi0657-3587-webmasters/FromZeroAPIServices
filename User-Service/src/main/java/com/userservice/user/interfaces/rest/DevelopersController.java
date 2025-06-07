@@ -46,9 +46,9 @@ public class DevelopersController {
     }
 
     @GetMapping
-    @Operation(summary = "Get all users", description = "Get all the users available in the system.")
+    @Operation(summary = "Get all developers", description = "Get all the developers available in the system.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Users retrieved successfully."),
+            @ApiResponse(responseCode = "200", description = "Developers retrieved successfully."),
             @ApiResponse(responseCode = "401", description = "Unauthorized.")
     })
     public ResponseEntity<List<DeveloperResource>> getAllDevelopers() {
