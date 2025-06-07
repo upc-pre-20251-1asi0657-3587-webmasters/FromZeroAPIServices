@@ -1,4 +1,4 @@
-package com.userservice.user.interfaces.rest.transform;
+package com.userservice.user.interfaces.rest.transform.developer;
 
 import com.userservice.user.domain.model.aggregates.Developer;
 import com.userservice.user.interfaces.rest.resources.DeveloperResource;

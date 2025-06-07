@@ -1,4 +1,4 @@
-package com.userservice.user.interfaces.rest.transform;
+package com.userservice.user.interfaces.rest.transform.developer;
 
 import com.userservice.user.domain.model.commands.CreateDeveloperCommand;
 import com.userservice.user.interfaces.rest.resources.CreateDeveloperResource;

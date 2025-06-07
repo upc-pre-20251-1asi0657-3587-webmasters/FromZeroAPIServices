@@ -1,4 +1,4 @@
-package com.userservice.user.interfaces.rest.transform;
+package com.userservice.user.interfaces.rest.transform.developer;
 
 import com.userservice.user.domain.model.commands.UpdateDeveloperCommand;
 import com.userservice.user.domain.model.valueobjects.developer.*;

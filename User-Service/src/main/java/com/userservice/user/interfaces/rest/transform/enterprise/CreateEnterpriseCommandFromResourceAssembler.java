@@ -1,4 +1,4 @@
-package com.userservice.user.interfaces.rest.transform;
+package com.userservice.user.interfaces.rest.transform.enterprise;
 
 import com.userservice.user.domain.model.commands.CreateEnterpriseCommand;
 import com.userservice.user.interfaces.rest.resources.CreateEnterpriseResource;
