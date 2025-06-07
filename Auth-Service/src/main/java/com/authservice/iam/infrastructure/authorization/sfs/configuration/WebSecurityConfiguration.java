@@ -43,6 +43,7 @@ public class WebSecurityConfiguration {
         var permittedRequestPatterns = new String[] {
                 "/api/v1/authentication/**",
                 "/api/v1/users/**",
+                "/api/v1/roles/**",
                 "/v3/api-docs/**",
                 "/swagger-ui.html",
                 "/swagger-ui/**",
