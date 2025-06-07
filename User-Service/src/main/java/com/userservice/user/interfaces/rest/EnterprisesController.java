@@ -20,10 +20,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "/api/v1/enterprise", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Enterprise", description = "Available enterprise endpoints")
-public class EnterpriseController {
+public class EnterprisesController {
     private final EnterpriseCommandService enterpriseCommandService;
 
-    public EnterpriseController(EnterpriseCommandService enterpriseCommandService) {
+    public EnterprisesController(EnterpriseCommandService enterpriseCommandService) {
         this.enterpriseCommandService = enterpriseCommandService;
     }
 
