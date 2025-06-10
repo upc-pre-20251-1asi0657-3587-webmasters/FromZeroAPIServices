@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DeliverableEventListener {
 
-    @JmsListener(destination = "payment.queue")
+    @JmsListener(destination = "deliverable.created")
     public void onPaymentEvent(DeliverableCreatedEvent event) {
         System.out.println("Mensaje recibido: " + event);
     }

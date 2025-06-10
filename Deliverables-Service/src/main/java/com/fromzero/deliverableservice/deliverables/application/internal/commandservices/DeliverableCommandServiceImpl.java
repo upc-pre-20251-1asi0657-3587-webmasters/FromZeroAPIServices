@@ -1,5 +1,6 @@
 package com.fromzero.deliverableservice.deliverables.application.internal.commandservices;
 
+import com.fromzero.deliverableservice.deliverables.domain.events.DeliverableCreatedEvent;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.DeliverableAlreadyApprovedException;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.DeliverableWithoutUploadException;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.IllegalDeliverableDeadlineDateException;
@@ -8,6 +9,7 @@ import com.fromzero.deliverableservice.deliverables.domain.model.aggregates.Deli
 import com.fromzero.deliverableservice.deliverables.domain.model.commands.*;
 import com.fromzero.deliverableservice.deliverables.domain.services.DeliverableCommandService;
 import com.fromzero.deliverableservice.deliverables.domain.valueobjects.DeliverableStatus;
+import com.fromzero.deliverableservice.deliverables.infrastructure.eventpublisher.DeliverablePublisher;
 import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DefaultDeliverableRepository;
 import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DeliverableRepository;
 import org.springframework.stereotype.Service;
@@ -20,15 +22,17 @@ import java.util.Optional;
 public class DeliverableCommandServiceImpl implements DeliverableCommandService {
     private final DeliverableRepository deliverableRepository;
     private final DefaultDeliverableRepository defaultDeliverableRepository;
+    private final DeliverablePublisher deliverablePublisher;
 
     // NOTE: Se necesita una interfaz para realizar la comunicacion con el servicio de proyectos
     // Se hara mediante Rest Templates
 
     public DeliverableCommandServiceImpl(
                                      DeliverableRepository deliverableRepository,
-                                     DefaultDeliverableRepository defaultDeliverableRepository) {
+                                     DefaultDeliverableRepository defaultDeliverableRepository, DeliverablePublisher deliverablePublisher) {
         this.deliverableRepository = deliverableRepository;
         this.defaultDeliverableRepository = defaultDeliverableRepository;
+        this.deliverablePublisher = deliverablePublisher;
     }
 
     @Override
@@ -67,6 +71,12 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         }
 
         this.deliverableRepository.save(deliverable);
+
+        DeliverableCreatedEvent event = new DeliverableCreatedEvent();
+        event.setUserEmail(deliverable.getName());
+        event.setDeliverableName(deliverable.getName());
+        event.setDeadline(deliverable.getDeadline());
+        deliverablePublisher.publish(event);
         return Optional.of(deliverable);
     }
 
