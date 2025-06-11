@@ -3,7 +3,9 @@ package com.userservice.user.application.internal.commandservices;
 import com.userservice.user.domain.model.aggregates.Developer;
 import com.userservice.user.domain.model.commands.CreateDeveloperCommand;
 import com.userservice.user.domain.model.commands.UpdateDeveloperCommand;
+import com.userservice.user.domain.model.events.UserCreatedEvent;
 import com.userservice.user.domain.services.DeveloperCommandService;
+import com.userservice.user.infrastructure.eventpublisher.UserPublisher;
 import com.userservice.user.infrastructure.persistence.jpa.repositories.DeveloperRepository;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
@@ -13,9 +15,11 @@ import java.util.Optional;
 @Service
 public class DeveloperCommandServiceImpl implements DeveloperCommandService {
     private final DeveloperRepository developerRepository;
+    private final UserPublisher userPublisher;
 
-    public DeveloperCommandServiceImpl(DeveloperRepository developerRepository) {
+    public DeveloperCommandServiceImpl(DeveloperRepository developerRepository, UserPublisher userPublisher) {
         this.developerRepository = developerRepository;
+        this.userPublisher = userPublisher;
     }
 
     @Override
@@ -23,6 +27,13 @@ public class DeveloperCommandServiceImpl implements DeveloperCommandService {
         var developer = new Developer(createDeveloperCommand);
         if (developerRepository.existsByDeveloperEmail(developer.getDeveloperEmail())) throw new IllegalArgumentException("Developer email already exists");
         developerRepository.save(developer);
+
+        UserCreatedEvent event = new UserCreatedEvent();
+        event.setName(developer.getDeveloperFirstName().toString());
+        event.setEmail(developer.getDeveloperEmail().toString());
+        event.setRole("Developer");
+        userPublisher.publishUserCreatedevent(event);
+
         return developerRepository.findByDeveloperId(developer.getDeveloperId());
     }
 
