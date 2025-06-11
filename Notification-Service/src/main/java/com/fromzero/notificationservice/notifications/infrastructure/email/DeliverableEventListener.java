@@ -9,6 +9,6 @@ public class DeliverableEventListener {
 
     @JmsListener(destination = "deliverable.created")
     public void onPaymentEvent(DeliverableCreatedEvent event) {
-        System.out.println("Mensaje recibido: " + event);
+        System.out.println("Mensaje recibido: " + event.getDeliverableName());
     }
 }
