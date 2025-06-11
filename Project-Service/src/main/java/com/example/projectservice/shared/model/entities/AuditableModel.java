@@ -1,4 +1,4 @@
-package com.example.projectservice.shared.domain.model.entities;
+package com.example.projectservice.shared.model.entities;
 
 
 import jakarta.persistence.Column;

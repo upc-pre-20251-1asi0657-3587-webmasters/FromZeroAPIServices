@@ -23,6 +23,24 @@ services:
     networks:
       - fromzeroapi
 
+  eurekaservice:
+    build: ../../Eureka-Service
+    container_name: eurekaservice
+    image: microservice-eureka:v1
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+    restart: always
+    networks:
+      - fromzeroapi
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   authservice:
     build: ../../Auth-Service   # carpeta donde está tu Dockerfile
     container_name: authservice
@@ -35,6 +53,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi
 
@@ -50,6 +69,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usersdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi
 
@@ -65,6 +85,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/supportticketsdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi
 
@@ -80,6 +101,7 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/projectsdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi
 
@@ -95,5 +117,6 @@ services:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/deliverablesdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi

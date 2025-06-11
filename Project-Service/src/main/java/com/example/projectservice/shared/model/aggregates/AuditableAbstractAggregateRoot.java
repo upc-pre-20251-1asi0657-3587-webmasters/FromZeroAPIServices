@@ -1,4 +1,4 @@
-package com.example.projectservice.shared.domain.model.aggregates;
+package com.example.projectservice.shared.model.aggregates;
 
 import jakarta.persistence.*;
 import lombok.Getter;
