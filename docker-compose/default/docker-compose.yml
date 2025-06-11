@@ -120,3 +120,21 @@ services:
       EUREKA_SERVER: http://eurekaservice:8761/eureka
     networks:
       - fromzeroapi
+
+  notificationsservice:
+    build: ../../Notification-Service   # carpeta donde está tu Dockerfile
+    container_name: notificationsservice
+    ports:
+      - "9085:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/notificationsdb
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: webmaster123
+      SENDGRID_TEMPLATE_ID: 1
+      SENDGRID_API_KEY: 1
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+    networks:
+      - fromzeroapi
