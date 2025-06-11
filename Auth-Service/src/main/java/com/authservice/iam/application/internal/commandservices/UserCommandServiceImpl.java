@@ -3,6 +3,7 @@ package com.authservice.iam.application.internal.commandservices;
 import com.authservice.iam.application.internal.outboundservices.hashing.HashingService;
 import com.authservice.iam.application.internal.outboundservices.tokens.TokenService;
 import com.authservice.iam.application.ports.output.UserProfileGateway;
+import com.authservice.iam.domain.events.AccountCreatedEvent;
 import com.authservice.iam.domain.exceptions.InvalidCredentialsException;
 import com.authservice.iam.domain.exceptions.UserAlreadyExistsException;
 import com.authservice.iam.domain.model.aggregates.User;
@@ -10,6 +11,7 @@ import com.authservice.iam.domain.model.commands.SignInCommand;
 import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
 import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
 import com.authservice.iam.domain.services.UserCommandService;
+import com.authservice.iam.infrastructure.eventpublisher.AuthPublisher;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.RoleRepository;
 import com.authservice.iam.infrastructure.persistence.jpa.repositories.UserRepository;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -26,7 +28,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
     private final UserProfileGateway userProfileGateway;
 
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, UserProfileGateway userProfileGateway) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, AuthPublisher authPublisher, UserProfileGateway userProfileGateway) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
@@ -46,7 +48,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        //userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
 
         return userRepository.findById(user.getUserId());
     }
@@ -63,7 +65,8 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        //userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
+
 
         return userRepository.findById(user.getUserId());
     }
