@@ -72,11 +72,11 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
 
         this.deliverableRepository.save(deliverable);
 
-        DeliverableCreatedEvent event = new DeliverableCreatedEvent();
-        event.setUserEmail(deliverable.getName());
-        event.setDeliverableName(deliverable.getName());
-        event.setDeadline(deliverable.getDeadline());
-        deliverablePublisher.publish(event);
+//        DeliverableCreatedEvent event = new DeliverableCreatedEvent();
+//        event.setUserEmail(deliverable.getName());
+//        event.setDeliverableName(deliverable.getName());
+//        event.setDeadline(deliverable.getDeadline());
+//        deliverablePublisher.publish(event);
         return Optional.of(deliverable);
     }
 
