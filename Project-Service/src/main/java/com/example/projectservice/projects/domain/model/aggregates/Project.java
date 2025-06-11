@@ -4,7 +4,7 @@ import com.example.projectservice.projects.domain.model.commands.CreateProjectCo
 import com.example.projectservice.projects.domain.state.*;
 import com.example.projectservice.projects.domain.valueobjects.ProjectStateEnum;
 import com.example.projectservice.projects.domain.valueobjects.ProjectTypeEnum;
-import com.example.projectservice.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.example.projectservice.shared.model.aggregates.AuditableAbstractAggregateRoot;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 

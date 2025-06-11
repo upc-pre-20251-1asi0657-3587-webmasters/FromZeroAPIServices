@@ -8,7 +8,7 @@ WORKDIR /app
 EXPOSE 8761
 
 # Copy the application JAR file into the container
-ADD ./target/microservice-eureka-0.0.1-SNAPSHOT.jar microservice-eureka.jar
+ADD ./target/Eureka-Service-0.0.1-SNAPSHOT.jar microservice-eureka.jar
 
 # Define the command to run the application when the container starts
 ENTRYPOINT [ "java", "-jar", "microservice-eureka.jar" ]

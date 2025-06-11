@@ -1,6 +1,6 @@
 package com.example.projectservice.projects.domain.model.aggregates;
 
-import com.example.projectservice.shared.domain.model.aggregates.AuditableAbstractAggregateRoot;
+import com.example.projectservice.shared.model.aggregates.AuditableAbstractAggregateRoot;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
