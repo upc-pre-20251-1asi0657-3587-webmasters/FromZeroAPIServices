@@ -32,12 +32,12 @@ public class GatewayBeans {
                 .routes()
                 .route(route -> route
                         .path("/api/v1/roles/**")
-                        .filters(filter -> filter.filter(authFilter))
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://Auth-Service")
                 )
                 .route(route -> route
                         .path("/api/v1/users/**")
-                        .filters(filter -> filter.filter(authFilter))
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://Auth-Service")
                 )
                 .route(route -> route
@@ -50,22 +50,27 @@ public class GatewayBeans {
                 )
                 .route(route -> route
                         .path("/api/v1/projects/**")
-                        .filters(filter -> filter.filter(authFilter))
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://project-service")
                 )
                 .route(route -> route
-                        .path("/api/v1/Projects/{projectId}/deliverables/")
-                        .filters(filter -> filter.filter(authFilter))
+                        .path("/api/v1/Projects/{projectId}/deliverables/**")
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://deliverables-service")
                 )
                 .route(route -> route
-                        .path("/api/v2/support-tickets/")
-                        .filters(filter -> filter.filter(authFilter))
+                        .path("/api/v1/candidates-management/**")
+                        //.filters(filter -> filter.filter(authFilter))
+                        .uri("lb://deliverables-service")
+                )
+                .route(route -> route
+                        .path("/api/v2/support-tickets/**")
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://support-service")
                 )
                 .route(route -> route
-                        .path("/api/v2/notifications/")
-                        .filters(filter -> filter.filter(authFilter))
+                        .path("/api/v2/notifications/**")
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://notification-service")
                 )
                 .route(route -> route
