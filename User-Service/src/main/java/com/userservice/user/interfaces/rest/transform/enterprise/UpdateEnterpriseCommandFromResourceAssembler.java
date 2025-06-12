@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public class UpdateEnterpriseCommandFromResourceAssembler {
     public static UpdateEnterpriseCommand toCommandFromResource(UUID developerId, UpdateEnterpriseResource updateEnterpriseResource) {
-        return new UpdateEnterpriseCommand(new EnterpriseId(developerId), new EnterpriseName(updateEnterpriseResource.enterpriseName()), new EnterpriseEmail(updateEnterpriseResource.enterpriseEmail()), new EnterpriseDescription(updateEnterpriseResource.enterpriseDescription()), new EnterpriseCountry(updateEnterpriseResource.enterpriseCountry()), new EnterpriseRuc(updateEnterpriseResource.enterpriseRuc()), new EnterprisePhone(updateEnterpriseResource.enterprisePhone()), new EnterpriseWebsite(updateEnterpriseResource.enterpriseWebsite()), new EnterpriseProfileImgUrl(updateEnterpriseResource.enterpriseProfileImgUrl()), new EnterpriseSector(updateEnterpriseResource.enterpriseSector()));
+        return new UpdateEnterpriseCommand(new EnterpriseId(developerId), new EnterpriseName(updateEnterpriseResource.enterpriseName()), new EnterpriseEmail(updateEnterpriseResource.enterpriseEmail()), new EnterpriseDescription(updateEnterpriseResource.description()), new EnterpriseCountry(updateEnterpriseResource.country()), new EnterpriseRuc(updateEnterpriseResource.ruc()), new EnterprisePhone(updateEnterpriseResource.phone()), new EnterpriseWebsite(updateEnterpriseResource.website()), new EnterpriseProfileImgUrl(updateEnterpriseResource.profileImgUrl()), new EnterpriseSector(updateEnterpriseResource.sector()));
     }
 }
