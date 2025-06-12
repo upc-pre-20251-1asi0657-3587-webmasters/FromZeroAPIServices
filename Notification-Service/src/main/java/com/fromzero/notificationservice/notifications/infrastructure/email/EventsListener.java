@@ -15,7 +15,7 @@ public class EventsListener {
 
     @JmsListener(destination = "account.created")
     public void onAccountCreatedEvent(UserCreatedEvent event) {
-        System.out.println("Account created for: " + event.getName() + "with email: " + event.getEmail() + " with role: " + event.getRole());
+        System.out.println("Account created for email: " + event.getEmail() + " with role: " + event.getRole());
 
     }
 }

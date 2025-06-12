@@ -6,7 +6,7 @@ import com.fromzero.backend.comunication.interfaces.rest.resources.CreateSupport
 
 public class CreateSupportTicketCommandFromResourceAsembler {
 
-    public static CreateSupportTicketCommand toCommandFromResource(CreateSupportTicketResource resource, Long sender){
-        return new CreateSupportTicketCommand(resource.title(), resource.type(), resource.description(), sender);
+    public static CreateSupportTicketCommand toCommandFromResource(CreateSupportTicketResource resource){
+        return new CreateSupportTicketCommand(resource.title(), resource.type(), resource.description(), resource.senderId());
     }
 }
