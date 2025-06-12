@@ -1,4 +1,4 @@
 package com.authservice.iam.interfaces.rest.resources;
 
-public record DeveloperResource(String userId, String userEmail, String userRole) {
+public record DeveloperResource(String id, String userEmail, String roles) {
 }

@@ -5,6 +5,6 @@ import com.authservice.iam.interfaces.rest.resources.SignUpEnterpriseResource;
 
 public class SignUpEnterpriseCommandFromResourceAssembler {
     public static SignUpEnterpriseCommand toCommandFromResource(SignUpEnterpriseResource signUpResource) {
-        return new SignUpEnterpriseCommand(signUpResource.userEmail(), signUpResource.userPassword(), signUpResource.userRole());
+        return new SignUpEnterpriseCommand(signUpResource.userEmail(), signUpResource.password(), "ROLE_ENTERPRISE");
     }
 }

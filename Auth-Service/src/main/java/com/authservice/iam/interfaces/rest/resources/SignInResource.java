@@ -1,4 +1,4 @@
 package com.authservice.iam.interfaces.rest.resources;
 
-public record SignInResource(String userEmail, String userPassword) {
+public record SignInResource(String userEmail, String password) {
 }
