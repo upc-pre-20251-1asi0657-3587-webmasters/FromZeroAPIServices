@@ -8,10 +8,10 @@
 		<version>3.4.5</version>
 	</parent>
 	<groupId>com.fromzero.backend</groupId>
-	<artifactId>Eureka-Service</artifactId>
+	<artifactId>Gateway-Microservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>Eureka-Service</name>
-	<description>Spring Boot Microservice Eureka</description>
+	<name>Gateway-Microservice</name>
+	<description>Spring Boot Microservice Gateway</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -40,13 +40,25 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-gateway</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-loadbalancer</artifactId>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 	</dependencies>
 	<dependencyManagement>
