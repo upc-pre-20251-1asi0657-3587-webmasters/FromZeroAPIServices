@@ -57,6 +57,9 @@ public class Developer {
         this.developerDescription = updateDeveloperCommand.developerDescription();
         this.developerPhone = updateDeveloperCommand.developerPhone();
         this.developerCountry = updateDeveloperCommand.developerCountry();
+        this.developerCompletedProjects = updateDeveloperCommand.developerCompletedProjects();
+        this.developerSpecialties = updateDeveloperCommand.developerSpecialties();
+        this.developerProfileImgUrl = updateDeveloperCommand.developerProfileImgUrl();
         return this;
     }
 }
