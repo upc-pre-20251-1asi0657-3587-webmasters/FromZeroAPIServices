@@ -61,7 +61,7 @@ public class GatewayBeans {
                 .route(route -> route
                         .path("/api/v1/candidates-management/**")
                         //.filters(filter -> filter.filter(authFilter))
-                        .uri("lb://deliverables-service")
+                        .uri("lb://candidates-service")
                 )
                 .route(route -> route
                         .path("/api/v2/support-tickets/**")
