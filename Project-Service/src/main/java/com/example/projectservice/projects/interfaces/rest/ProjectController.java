@@ -80,11 +80,12 @@ public class ProjectController {
     @Operation(summary = "Create project")
     @PostMapping
     public ResponseEntity<CreateProjectResource> createProject(@RequestBody CreateProjectResource resource) {
-        var enterprise = this.profileContextFacade.getEnterpriseByUserId(resource.ownerId());
-        if (enterprise == null) return ResponseEntity.badRequest().build();
+        // NOTE: For the moment we are not validating the ownerId
+//        var enterprise = this.profileContextFacade.getEnterpriseByUserId(resource.ownerId());
+//        if (enterprise == null) return ResponseEntity.badRequest().build();
         var programmingLanguages = getProgrammingLanguages(resource.languages());
         var frameworks=getFrameworks(resource.frameworks());
-        var createProjectCommand = new CreateProjectCommand(resource.name(), resource.description(), enterprise,
+        var createProjectCommand = new CreateProjectCommand(resource.name(), resource.description(), resource.ownerId(),
                 programmingLanguages,frameworks,resource.type(),resource.budget(),resource.methodologies());
         var project = this.projectCommandService.handle(createProjectCommand);
         if (project.isEmpty()) return ResponseEntity.badRequest().build();
@@ -116,10 +117,10 @@ public class ProjectController {
 
     @Operation(summary = "Get All Projects By Enterprise Id")
     @GetMapping(value = "/enterprise/{enterpriseUserId}")
-    public ResponseEntity<List<ProjectResource>> getAllProjectsByEnterpriseId(@PathVariable Long enterpriseUserId){
-        var enterprise = this.profileContextFacade.getEnterpriseByUserId(enterpriseUserId);
-        if(enterprise==null) return ResponseEntity.badRequest().build();
-        var getProjectsByEnterpriseIdQuery = new GetAllProjectsByEnterpriseIdQuery(enterprise);
+    public ResponseEntity<List<ProjectResource>> getAllProjectsByEnterpriseId(@PathVariable String enterpriseUserId){
+//        var enterprise = this.profileContextFacade.getEnterpriseByUserId(enterpriseUserId);
+//        if(enterprise==null) return ResponseEntity.badRequest().build();
+        var getProjectsByEnterpriseIdQuery = new GetAllProjectsByEnterpriseIdQuery(enterpriseUserId);
         var projects =this.projectQueryService.handle(getProjectsByEnterpriseIdQuery);
         var projectResources = projects.stream()
                 .map(ProjectResourceFromEntityAssembler::toResourceFromEntity)

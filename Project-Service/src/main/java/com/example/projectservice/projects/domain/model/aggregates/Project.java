@@ -29,7 +29,7 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     private Double progress;
 
     @Column(nullable = false)
-    private Long enterprise;
+    private String enterprise;
 
     @Column(nullable = false)
     private Long developer;
@@ -133,11 +133,11 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
         this.progress = progress;
     }
 
-    public Long getEnterprise() {
+    public String getEnterprise() {
         return enterprise;
     }
 
-    public void setEnterprise(Long enterprise) {
+    public void setEnterprise(String enterprise) {
         this.enterprise = enterprise;
     }
 
