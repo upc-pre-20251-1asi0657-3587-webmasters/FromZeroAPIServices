@@ -68,7 +68,6 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
 
-
         return userRepository.findById(user.getUserId());
     }
 
