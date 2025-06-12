@@ -49,7 +49,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        // userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
 
         return userRepository.findById(user.getUserId());
     }

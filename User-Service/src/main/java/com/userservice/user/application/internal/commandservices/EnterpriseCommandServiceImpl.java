@@ -27,11 +27,13 @@ public class EnterpriseCommandServiceImpl implements EnterpriseCommandService {
         if (enterpriseRepository.existsByEnterpriseEmail(enterprise.getEnterpriseEmail())) throw new IllegalArgumentException("Enterprise email already exists");
         enterpriseRepository.save(enterprise);
 
+        /*
         UserCreatedEvent event = new UserCreatedEvent();
         event.setName(enterprise.getEnterpriseName().toString());
         event.setEmail(enterprise.getEnterpriseEmail().toString());
         event.setRole("Enterprise");
         userPublisher.publishUserCreatedevent(event);
+        */
 
         return enterpriseRepository.findByEnterpriseId(enterprise.getEnterpriseId());
     }

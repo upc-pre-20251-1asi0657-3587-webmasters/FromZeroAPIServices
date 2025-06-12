@@ -28,11 +28,13 @@ public class DeveloperCommandServiceImpl implements DeveloperCommandService {
         if (developerRepository.existsByDeveloperEmail(developer.getDeveloperEmail())) throw new IllegalArgumentException("Developer email already exists");
         developerRepository.save(developer);
 
+        /*
         UserCreatedEvent event = new UserCreatedEvent();
         event.setName(developer.getDeveloperFirstName().toString());
         event.setEmail(developer.getDeveloperEmail().toString());
         event.setRole("Developer");
         userPublisher.publishUserCreatedevent(event);
+        */
 
         return developerRepository.findByDeveloperId(developer.getDeveloperId());
     }
