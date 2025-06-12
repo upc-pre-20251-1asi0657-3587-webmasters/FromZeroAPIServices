@@ -1,5 +1,8 @@
 package com.userservice.user.domain.model.valueobjects.developer;
 
+import jakarta.persistence.Embeddable;
+
+@Embeddable
 public record DeveloperPhone(String developerPhone) {
     public DeveloperPhone() { this(null); }
 

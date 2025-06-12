@@ -34,6 +34,15 @@ public class Developer {
     @Embedded
     private DeveloperCountry developerCountry;
 
+    @Embedded
+    private DeveloperCompletedProjects developerCompletedProjects;
+
+    @Embedded
+    private DeveloperSpecialties developerSpecialties;
+
+    @Embedded
+    private DeveloperProfileImgUrl developerProfileImgUrl;
+
     public Developer() { }
 
     public Developer(CreateDeveloperCommand createDeveloperCommand) {
