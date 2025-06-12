@@ -7,6 +7,7 @@ import com.authservice.iam.domain.events.AccountCreatedEvent;
 import com.authservice.iam.domain.exceptions.InvalidCredentialsException;
 import com.authservice.iam.domain.exceptions.UserAlreadyExistsException;
 import com.authservice.iam.domain.model.aggregates.User;
+import com.authservice.iam.domain.model.commands.RefreshTokenCommand;
 import com.authservice.iam.domain.model.commands.SignInCommand;
 import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
 import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
@@ -48,7 +49,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        // userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
 
         return userRepository.findById(user.getUserId());
     }
@@ -77,7 +78,16 @@ public class UserCommandServiceImpl implements UserCommandService {
         if (!hashingService.matches(signInCommand.userPassword(), user.getUserPassword())) {
             throw new InvalidCredentialsException();
         }
-        var token = tokenService.generateToken(user);
+        var token = tokenService.generateToken(user.getUserEmail());
         return Optional.of(new ImmutablePair<>(user, token));
+    }
+
+    @Override
+    public Optional<ImmutablePair<User, String>> handle(RefreshTokenCommand command) {
+        String username = tokenService.getUsernameFromToken(command.token());
+        var user = userRepository.findByUserEmail(username);
+        if (user.isEmpty()) throw new RuntimeException("User not found");
+        var token = tokenService.generateToken(user.get().getUserEmail());
+        return Optional.of(ImmutablePair.of(user.get(), token));
     }
 }
