@@ -31,7 +31,7 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     @Column(nullable = false)
     private String enterprise;
 
-    @Column(nullable = false)
+
     private Long developer;
 
     @Column
