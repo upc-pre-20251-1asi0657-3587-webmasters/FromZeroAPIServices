@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record DeveloperSpecialties(String developerSpecialties) {
-    public DeveloperSpecialties() { this(null); }
+    public DeveloperSpecialties() { this("Not specialties provided"); }
 
     public DeveloperSpecialties {
         if (developerSpecialties == null || developerSpecialties.isBlank()) {
