@@ -73,7 +73,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail(), signUpEnterpriseCommand.enterpriseName());
 
         return userRepository.findById(user.getUserId());
     }
