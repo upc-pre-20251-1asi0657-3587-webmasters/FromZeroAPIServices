@@ -46,10 +46,20 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.deadline = LocalDateTime.parse(command.date());
         this.state = DeliverableStatus.PENDING;
         this.developerDescription = null;
-        this.fileUrl = "https://i.scdn.co/image/ab67616d0000b273fb31e9fdfd96144812da8e5f";
+        this.fileUrl = null;
         this.projectId = command.projectId();
         this.orderNumber = command.orderNumber();
     }
+
+    public Deliverable(String name, String description, String deadline, String projectId, int orderNumber, DeliverableStatus state) {
+        this.name = name;
+        this.description = description;
+        this.deadline = LocalDateTime.parse(deadline);
+        this.projectId = projectId;
+        this.orderNumber = orderNumber;
+        this.state = DeliverableStatus.PENDING;
+    }
+
 
     public Deliverable() {}
 

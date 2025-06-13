@@ -28,8 +28,8 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
     // Se hara mediante Rest Templates
 
     public DeliverableCommandServiceImpl(
-                                     DeliverableRepository deliverableRepository,
-                                     DefaultDeliverableRepository defaultDeliverableRepository, DeliverablePublisher deliverablePublisher) {
+            DeliverableRepository deliverableRepository,
+            DefaultDeliverableRepository defaultDeliverableRepository, DeliverablePublisher deliverablePublisher) {
         this.deliverableRepository = deliverableRepository;
         this.defaultDeliverableRepository = defaultDeliverableRepository;
         this.deliverablePublisher = deliverablePublisher;
@@ -235,4 +235,3 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         }
     }
 }
-
