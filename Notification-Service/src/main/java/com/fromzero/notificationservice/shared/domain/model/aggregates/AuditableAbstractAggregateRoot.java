@@ -18,8 +18,8 @@ import java.util.UUID;
 public class AuditableAbstractAggregateRoot<T extends AbstractAggregateRoot<T>> extends AbstractAggregateRoot<T> {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private UUID id;
+    @Column(columnDefinition = "BINARY(16)")
+    private UUID id = UUID.randomUUID();
 
     @CreatedDate
     @Column(nullable = false, updatable = false)

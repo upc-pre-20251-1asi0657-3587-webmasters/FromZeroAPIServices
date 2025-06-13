@@ -22,4 +22,8 @@ public class Account  extends AuditableAbstractAggregateRoot<Account> {
         this.name = name;
         this.role = role;
     }
+
+    public Account() {
+
+    }
 }
