@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseWebsite(String enterpriseWebsite) {
-    public EnterpriseWebsite() { this(null); }
+    public EnterpriseWebsite() { this("No website provided"); }
 
     public EnterpriseWebsite {
         if (enterpriseWebsite == null ||  enterpriseWebsite.isBlank()) {
