@@ -48,6 +48,8 @@ public class Developer {
     public Developer(CreateDeveloperCommand createDeveloperCommand) {
         this.developerId = new DeveloperId(createDeveloperCommand.developerId());
         this.developerEmail = new DeveloperEmail(createDeveloperCommand.developerEmail());
+        this.developerFirstName = new DeveloperFirstName(createDeveloperCommand.developerFirstName());
+        this.developerLastName = new DeveloperLastName(createDeveloperCommand.developerLastName());
     }
 
     public Developer updateInformation(UpdateDeveloperCommand updateDeveloperCommand) {

@@ -5,6 +5,6 @@ import com.authservice.iam.interfaces.rest.resources.SignUpDeveloperResource;
 
 public class SignUpDeveloperCommandFromResourceAssembler {
     public static SignUpDeveloperCommand toCommandFromResource(SignUpDeveloperResource signUpResource) {
-        return new SignUpDeveloperCommand(signUpResource.userEmail(), signUpResource.password(), "ROLE_DEVELOPER");
+        return new SignUpDeveloperCommand(signUpResource.userEmail(), signUpResource.password(), "ROLE_DEVELOPER", signUpResource.firstName(), signUpResource.lastName());
     }
 }

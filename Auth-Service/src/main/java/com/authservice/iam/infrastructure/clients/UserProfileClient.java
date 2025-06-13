@@ -18,8 +18,8 @@ public class UserProfileClient implements UserProfileGateway {
     }
 
     @Override
-    public void createDeveloperProfile(UUID uuid, String email) {
-        var request = new CreateDeveloperRequest(uuid, email);
+    public void createDeveloperProfile(UUID uuid, String email, String firstName, String lastName) {
+        var request = new CreateDeveloperRequest(uuid, email, firstName, lastName);
         restTemplate.postForEntity("http://localhost:9082/api/v1/developers/new-developer", request, Void.class);
     }
 

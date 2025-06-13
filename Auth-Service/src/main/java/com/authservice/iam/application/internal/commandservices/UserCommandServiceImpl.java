@@ -51,7 +51,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail(), signUpDeveloperCommand.userFirstName(), signUpDeveloperCommand.userLastName());
 
         // Publish account created event
         var accountCreatedEvent = new AccountCreatedEvent();
