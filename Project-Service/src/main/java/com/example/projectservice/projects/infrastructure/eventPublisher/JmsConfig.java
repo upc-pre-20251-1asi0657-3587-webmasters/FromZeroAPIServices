@@ -30,6 +30,10 @@ public class JmsConfig {
                 "com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent",
                 com.example.projectservice.projects.domain.model.events.DeveloperSelectedEvent.class
         );
+        typeIdMappings.put(
+                "com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent",
+                com.example.projectservice.projects.domain.model.events.DeveloperAppliedEvent.class
+        );
         converter.setTypeIdMappings(typeIdMappings);
 
         return converter;

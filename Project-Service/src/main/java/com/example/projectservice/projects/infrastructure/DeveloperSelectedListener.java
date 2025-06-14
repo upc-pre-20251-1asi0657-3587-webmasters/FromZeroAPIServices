@@ -8,16 +8,16 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.JmsListener;
 
 @Configuration
-public class CandidateSelectedListener {
+public class DeveloperSelectedListener {
 
     private final ProjectRepository projectRepository;
 
 
-    public CandidateSelectedListener(ProjectRepository projectRepository) {
+    public DeveloperSelectedListener(ProjectRepository projectRepository) {
         this.projectRepository = projectRepository;
     }
 
-    @JmsListener(destination = "candidate.selected")
+    @JmsListener(destination = "developer.selected")
     public void onDeveloperSelected(DeveloperSelectedEvent event) {
         Project project = projectRepository.findById(event.getProjectId())
                 .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + event.getProjectId()));

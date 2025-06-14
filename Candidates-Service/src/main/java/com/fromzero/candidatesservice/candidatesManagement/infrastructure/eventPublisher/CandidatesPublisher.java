@@ -1,5 +1,6 @@
 package com.fromzero.candidatesservice.candidatesManagement.infrastructure.eventPublisher;
 
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent;
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,12 @@ public class CandidatesPublisher {
         this.jmsTemplate = jmsTemplate;
     }
 
-    public void publish(DeveloperSelectedEvent event) {
-        jmsTemplate.convertAndSend("candidate.selected", event);
+    public void publishSelected(DeveloperSelectedEvent event) {
+        jmsTemplate.convertAndSend("developer.selected", event);
     }
+
+    public void publishApplied(DeveloperAppliedEvent event) {
+        jmsTemplate.convertAndSend("developer.applied", event);
+    }
+
 }
