@@ -10,9 +10,9 @@ import java.util.UUID;
 
 public interface CandidateRepository extends JpaRepository<Candidate, UUID> {
 
-    List<Candidate> findAllByProjectId(UUID projectId);
+    List<Candidate> findAllByProjectId(Long projectId);
 
-    boolean existsByProjectIdAndDeveloperId(UUID projectId, UUID developerId);
+    boolean existsByProjectIdAndDeveloperId(Long projectId, UUID developerId);
 
-    Optional<Candidate> findCandidateByProjectIdAndDeveloperId(UUID projectId, UUID developerId);
+    Optional<Candidate> findCandidateByProjectIdAndDeveloperId(Long projectId, UUID developerId);
 }

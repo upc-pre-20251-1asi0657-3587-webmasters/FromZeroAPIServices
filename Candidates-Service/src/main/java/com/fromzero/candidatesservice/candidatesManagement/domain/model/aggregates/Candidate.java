@@ -22,7 +22,7 @@ public class Candidate extends AuditableAbstractAggregateRoot<Candidate> {
     private UUID developerId;
 
     @Column(nullable = false)
-    private UUID projectId;
+    private Long projectId;
 
     @Column(nullable = false)
     private String firstName;
@@ -40,7 +40,7 @@ public class Candidate extends AuditableAbstractAggregateRoot<Candidate> {
 
     }
 
-    public Candidate(UUID developerId, UUID projectId, String firstName, String lastName, String description) {
+    public Candidate(UUID developerId, Long projectId, String firstName, String lastName, String description) {
         this.developerId = developerId;
         this.projectId = projectId;
         this.firstName = firstName;
