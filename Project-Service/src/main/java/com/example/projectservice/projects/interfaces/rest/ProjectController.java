@@ -4,6 +4,7 @@ import com.example.projectservice.projects.domain.model.aggregates.Framework;
 import com.example.projectservice.projects.domain.model.aggregates.ProgrammingLanguage;
 import com.example.projectservice.projects.domain.model.commands.CreateProjectCommand;
 import com.example.projectservice.projects.domain.model.commands.DeleteProjectCommand;
+import com.example.projectservice.projects.domain.model.commands.UpdateProjectProgressCommand;
 import com.example.projectservice.projects.domain.model.queries.*;
 import com.example.projectservice.projects.domain.services.FrameworksQueryService;
 import com.example.projectservice.projects.domain.services.ProgrammingLanguagesQueryService;
@@ -17,6 +18,7 @@ import com.example.projectservice.projects.interfaces.rest.transform.ProjectReso
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,7 +79,7 @@ public class ProjectController {
         return frameworksList;
     }
 
-    @Operation(summary = "Create project")
+    @Operation(summary = "Create projectId")
     @PostMapping
     public ResponseEntity<CreateProjectResource> createProject(@RequestBody CreateProjectResource resource) {
         // NOTE: For the moment we are not validating the ownerId
@@ -128,7 +130,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectResources);
     }
 
-    @Operation(summary = "Delete a project by Id")
+    @Operation(summary = "Delete a projectId by Id")
     @DeleteMapping(value = "/{projectId}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long projectId) {
         var getProjectByIdQuery = new GetProjectByIdQuery(projectId);
@@ -137,6 +139,13 @@ public class ProjectController {
         var deleteProjectCommand = new DeleteProjectCommand(project.get().getId());
         this.projectCommandService.handle(deleteProjectCommand);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Update project progress")
+    @PutMapping( value= "/update-progress", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateProjectProgress(@RequestBody UpdateProjectProgressCommand command) {
+        projectCommandService.handle(command);
+        return ResponseEntity.ok().build();
     }
 
 }

@@ -31,7 +31,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
     private String fileUrl;
 
     @Column(nullable = false)
-    private String projectId;
+    private Long projectId;
 
     @Lob
     @Column(columnDefinition = "TEXT")
@@ -47,7 +47,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.state = DeliverableStatus.PENDING;
         this.developerDescription = null;
         this.fileUrl = null;
-        this.projectId = command.projectId();
+        this.projectId = Long.valueOf(command.projectId());
         this.orderNumber = command.orderNumber();
     }
 
@@ -55,7 +55,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.name = name;
         this.description = description;
         this.deadline = LocalDateTime.parse(deadline);
-        this.projectId = projectId;
+        this.projectId = Long.valueOf(projectId);
         this.orderNumber = orderNumber;
         this.state = DeliverableStatus.PENDING;
     }
@@ -112,12 +112,12 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.fileUrl = fileUrl;
     }
 
-    public String getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
     public void setProjectId(String projectId) {
-        this.projectId = projectId;
+        this.projectId = Long.valueOf(projectId);
     }
 
     public String getDeveloperDescription() {

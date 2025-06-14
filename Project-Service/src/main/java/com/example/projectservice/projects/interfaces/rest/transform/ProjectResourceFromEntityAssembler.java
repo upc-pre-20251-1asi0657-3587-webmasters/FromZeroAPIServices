@@ -35,6 +35,6 @@ public class ProjectResourceFromEntityAssembler {
                     entity.getBudget(), entity.getMethodologies());
         }
 
-        throw new IllegalArgumentException("The state of the project is not valid");
+        throw new IllegalArgumentException("The state of the projectId is not valid");
     }
 }

@@ -15,6 +15,6 @@ public interface ProjectRepository extends JpaRepository<Project,Long> {
     List<Project> findAllByDeveloper(Long developer);
     List<Project> findAllByEnterprise(String enterprise);
 
-//    @Query("SELECT c FROM Candidate c WHERE c.project.id = :projectId")
+//    @Query("SELECT c FROM Candidate c WHERE c.projectId.id = :projectId")
 //    List<Candidate> findAllCandidatesByProjectId(@Param("projectId") Long projectId);
 }

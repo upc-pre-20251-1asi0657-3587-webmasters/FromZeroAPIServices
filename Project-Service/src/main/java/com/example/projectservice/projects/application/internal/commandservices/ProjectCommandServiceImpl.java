@@ -30,7 +30,7 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
 
     @Override
     public Optional<Project> handle(CreateProjectCommand command) {
-        System.out.println("ejecutando create project command");
+        System.out.println("ejecutando create projectId command");
         var project = new Project(command);
         this.projectRepository.save(project);
 
@@ -53,40 +53,27 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
             System.err.println("Error al conectar con el servicio de deliverables " + e.getMessage());
         }
 
-//        try {
-//            String deliverablesServiceUrl = "http://deliverables-service/api/v1/Projects/" + project.getId() + "/deliverables";
-//            restTemplate.postForEntity(deliverablesServiceUrl, deliverableRequest, Void.class);
-//            System.out.println("Solicitud enviada al servicio de Deliverables para crear el deliverable.");
-//        } catch (HttpClientErrorException | HttpServerErrorException e) {
-//            System.err.println("HTTP Error creating deliverable: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
-//        } catch (Exception e) {
-//            System.err.println("Error al crear el deliverable: " + e.getMessage());
-//        }
-
         return Optional.of(project);
     }
 
     @Override
     public Optional<Project> handle(UpdateProjectProgressCommand command) {
-        var project = command.project();
-        project.setProgress(command.progress());
+        var project = projectRepository.findById(command.projectId());
+        if (project.isEmpty()) throw new IllegalArgumentException("Project not found");
 
-        // NOTE: Dependiendo de la lógica de deliverables que se tenga, podríamos agregar una validación
-        // para verificar si todos los deliverables han sido aprobados, lo que cambiaría el estado del proyecto.
-        // boolean allDeliverablesApproved = deliverableRepository.findAllByProject(project)
-        //         .stream()
-        //         .allMatch(deliverable -> {
-        //             return deliverable.getState() == DeliverableStatus.APPROVED;
-        //         });
-        //
-        // if (allDeliverablesApproved) {
-        //     project.getStateHandler().completeProject(project);
-        //     //project.setState(ProjectStateEnum.COMPLETED);
-        // }
+        var actualProject = project.get();
+        actualProject.setProgress(command.progress());
 
-        this.projectRepository.save(project);
-        return Optional.of(project);
+        if (command.progress() >= 100.0) {
+            actualProject.setState(ProjectStateEnum.COMPLETED);
+        }
+
+        System.out.println("estado del proyecto: " + actualProject.getState());
+
+        projectRepository.save(actualProject);
+        return Optional.of(actualProject);
     }
+
 
     @Override
     @Transactional
@@ -95,20 +82,20 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
 
-        //if the project's state is COMPLETED or IN PROCESS
+        //if the projectId's state is COMPLETED or IN PROCESS
         if (project.getState() == ProjectStateEnum.COMPLETED || project.getState() == ProjectStateEnum.IN_PROCESS) {
-            throw new IllegalArgumentException("Cannot delete a completed or an in process project");
+            throw new IllegalArgumentException("Cannot delete a completed or an in process projectId");
         }
 
-        //if the project have a developer working on it
+        //if the projectId have a developer working on it
         if(project.getDeveloper() != null) {
-            throw new IllegalArgumentException("Cannot delete a project with an assigned developer");
+            throw new IllegalArgumentException("Cannot delete a projectId with an assigned developer");
         }
 
 
         // NOTE: Aquí también podemos agregar la lógica de comunicación con el servicio de Deliverables
         // para eliminar o actualizar los deliverables antes de eliminar el proyecto si es necesario.
-        // deliverableService.deleteDeliverablesForProject(project);
+        // deliverableService.deleteDeliverablesForProject(projectId);
 
         this.projectRepository.delete(project);
     }
