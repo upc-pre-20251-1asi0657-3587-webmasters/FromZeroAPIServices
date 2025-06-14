@@ -10,7 +10,7 @@ import java.util.List;
 
 public record ProjectResource(
         Long id, String name, String description, String state, Double progress,
-        String ownerId, Long developerId, List<String> candidatesList,
+        String ownerId, String developerId, List<String> candidatesList,
         List<ProgrammingLanguage> languages, List<Framework> frameworks, String type,
         String budget, String methodologies) {
     public ProjectResource{

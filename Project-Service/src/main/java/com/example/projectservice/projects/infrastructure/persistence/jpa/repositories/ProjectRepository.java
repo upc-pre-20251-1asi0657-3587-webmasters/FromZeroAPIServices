@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,Long> {
     List<Project> findAllByState(ProjectStateEnum state);
-    List<Project> findAllByDeveloper(Long developer);
+    List<Project> findAllByDeveloper(String developer);
     List<Project> findAllByEnterprise(String enterprise);
 
 //    @Query("SELECT c FROM Candidate c WHERE c.projectId.id = :projectId")

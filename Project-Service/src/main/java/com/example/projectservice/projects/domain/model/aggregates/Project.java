@@ -32,7 +32,7 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     private String enterprise;
 
 
-    private Long developer;
+    private String developer;
 
     @Column
     private List<String> candidates = new ArrayList<>();
@@ -141,11 +141,11 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
         this.enterprise = enterprise;
     }
 
-    public Long getDeveloper() {
+    public String getDeveloper() {
         return developer;
     }
 
-    public void setDeveloper(Long developer) {
+    public void setDeveloper(String developer) {
         this.developer = developer;
     }
 
