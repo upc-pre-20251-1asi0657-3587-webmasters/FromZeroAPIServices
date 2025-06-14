@@ -36,7 +36,7 @@ public class CandidatesManagementController {
 
     @Operation(summary = "Get all candidates by projectId")
     @GetMapping("/project/{projectId}")
-    public ResponseEntity<List<CandidateResource>> getAllCandidatesByProjectId(@PathVariable UUID projectId) {
+    public ResponseEntity<List<CandidateResource>> getAllCandidatesByProjectId(@PathVariable Long projectId) {
         var query = new GetAllCandidatesByProjectIdQuery(projectId);
         var candidates = candidateQueryService.handle(query);
 
@@ -49,7 +49,7 @@ public class CandidatesManagementController {
 
     @Operation(summary = "Select a candidate for a project")
     @PatchMapping("/project/{projectId}/candidate/{candidateId}/select")
-    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable UUID projectId, @PathVariable UUID candidateId) {
+    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID candidateId) {
         var command = new SelectCandidateCommand(candidateId, projectId);
         var candidate = candidateCommandService.handle(command);
         if (candidate.isEmpty()) return ResponseEntity.badRequest().build();
@@ -59,7 +59,7 @@ public class CandidatesManagementController {
 
     @Operation(summary = "Apply to a project")
     @PostMapping("/project/{projectId}/apply")
-    public ResponseEntity<CandidateResource> applyToProject(@PathVariable UUID projectId,
+    public ResponseEntity<CandidateResource> applyToProject(@PathVariable Long projectId,
                                                             @RequestBody ApplyToProjectResource resource) {
         var command = new ApplyToProjectCommand(
                 resource.developerId(),

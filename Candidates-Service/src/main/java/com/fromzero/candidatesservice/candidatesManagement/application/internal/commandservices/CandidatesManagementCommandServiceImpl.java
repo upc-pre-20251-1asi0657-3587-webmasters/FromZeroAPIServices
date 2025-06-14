@@ -1,9 +1,12 @@
 package com.fromzero.candidatesservice.candidatesManagement.application.internal.commandservices;
 
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent;
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.aggregates.Candidate;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.ApplyToProjectCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateCommandService;
+import com.fromzero.candidatesservice.candidatesManagement.infrastructure.eventPublisher.CandidatesPublisher;
 import com.fromzero.candidatesservice.candidatesManagement.infrastructure.persistence.jpa.repositories.CandidateRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +17,11 @@ import java.util.Optional;
 public class CandidatesManagementCommandServiceImpl implements CandidateCommandService {
 
     private final CandidateRepository candidateRepository;
+    private final CandidatesPublisher candidatesPublisher;
 
-    public CandidatesManagementCommandServiceImpl(CandidateRepository candidateRepository) {
+    public CandidatesManagementCommandServiceImpl(CandidateRepository candidateRepository, CandidatesPublisher candidatesPublisher) {
         this.candidateRepository = candidateRepository;
+        this.candidatesPublisher = candidatesPublisher;
     }
 
 
@@ -38,6 +43,12 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
         );
 
         candidateRepository.save(candidate);
+
+        DeveloperAppliedEvent event = new DeveloperAppliedEvent();
+        event.setProjectId(command.projectId());
+        event.setDeveloperId(String.valueOf(command.developerId()));
+        candidatesPublisher.publishApplied(event);
+
         return Optional.of(candidate);
     }
 
@@ -57,6 +68,12 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
 
         candidate.setSelected(true);
         candidateRepository.save(candidate);
+
+        DeveloperSelectedEvent event = new DeveloperSelectedEvent();
+        event.setDeveloperId(String.valueOf(candidate.getCandidateId()));
+        event.setProjectId(candidate.getProjectId());
+        candidatesPublisher.publishSelected(event);
+
 
         return Optional.of(candidate);
     }

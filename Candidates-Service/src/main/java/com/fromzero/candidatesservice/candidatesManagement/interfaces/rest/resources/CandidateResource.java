@@ -3,7 +3,7 @@ package com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.reso
 import java.util.UUID;
 
 public record CandidateResource(
-        String firstName, String lastName, String description, UUID developerId, UUID projectId
+        String firstName, String lastName, String description, UUID developerId, Long projectId
 ) {
     public CandidateResource {
         if (firstName == null) {
