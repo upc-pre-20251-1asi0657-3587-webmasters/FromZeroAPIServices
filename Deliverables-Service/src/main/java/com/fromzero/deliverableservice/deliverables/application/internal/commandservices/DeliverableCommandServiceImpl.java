@@ -1,6 +1,7 @@
 package com.fromzero.deliverableservice.deliverables.application.internal.commandservices;
 
-import com.fromzero.deliverableservice.deliverables.domain.events.DeliverableCreatedEvent;
+import
+        com.fromzero.deliverableservice.deliverables.domain.events.DeliverableCreatedEvent;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.DeliverableAlreadyApprovedException;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.DeliverableWithoutUploadException;
 import com.fromzero.deliverableservice.deliverables.domain.exceptions.IllegalDeliverableDeadlineDateException;
@@ -9,6 +10,7 @@ import com.fromzero.deliverableservice.deliverables.domain.model.aggregates.Deli
 import com.fromzero.deliverableservice.deliverables.domain.model.commands.*;
 import com.fromzero.deliverableservice.deliverables.domain.services.DeliverableCommandService;
 import com.fromzero.deliverableservice.deliverables.domain.valueobjects.DeliverableStatus;
+import com.fromzero.deliverableservice.deliverables.infrastructure.clients.ProjectServiceClient;
 import com.fromzero.deliverableservice.deliverables.infrastructure.eventpublisher.DeliverablePublisher;
 import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DefaultDeliverableRepository;
 import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DeliverableRepository;
@@ -21,18 +23,15 @@ import java.util.Optional;
 @Service
 public class DeliverableCommandServiceImpl implements DeliverableCommandService {
     private final DeliverableRepository deliverableRepository;
-    private final DefaultDeliverableRepository defaultDeliverableRepository;
-    private final DeliverablePublisher deliverablePublisher;
 
-    // NOTE: Se necesita una interfaz para realizar la comunicacion con el servicio de proyectos
-    // Se hara mediante Rest Templates
+    private final DeliverablePublisher deliverablePublisher;
+    private final ProjectServiceClient projectServiceClient;
 
     public DeliverableCommandServiceImpl(
-                                     DeliverableRepository deliverableRepository,
-                                     DefaultDeliverableRepository defaultDeliverableRepository, DeliverablePublisher deliverablePublisher) {
+            DeliverableRepository deliverableRepository, DeliverablePublisher deliverablePublisher, ProjectServiceClient projectServiceClient) {
         this.deliverableRepository = deliverableRepository;
-        this.defaultDeliverableRepository = defaultDeliverableRepository;
         this.deliverablePublisher = deliverablePublisher;
+        this.projectServiceClient = projectServiceClient;
     }
 
     @Override
@@ -41,7 +40,7 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         var deliverable = new Deliverable(command);
 
         //to assign the order number to a new deliverable
-        Integer maxOrderValue=deliverableRepository.findMaxOrderNumberByProject(command.projectId());
+        Integer maxOrderValue=deliverableRepository.findMaxOrderNumberByProject(Long.valueOf(command.projectId()));
         int newOrderValue = 1;
 
         if(maxOrderValue==null){
@@ -50,7 +49,7 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
             newOrderValue=maxOrderValue+1;
 
             //to prevent the user from creating a deliverable with a deadline before the last one
-            var lastDeliverable = this.deliverableRepository.findByProjectIdAndOrderNumber(command.projectId(), maxOrderValue);
+            var lastDeliverable = this.deliverableRepository.findByProjectIdAndOrderNumber(Long.valueOf(command.projectId()), maxOrderValue);
 
             if(lastDeliverable.get().getDeadline().isAfter(deliverable.getDeadline())){
                 throw new IllegalDeliverableDeadlineDateException("The deadline date is before the last deliverable");
@@ -99,13 +98,13 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         if(deliverable.isEmpty()){
             throw new IllegalArgumentException();
         }
-        var currentDeliverable = deliverable.get();
+
 
         //if the deliverable before this one is not approved
-        if (currentDeliverable.getOrderNumber()>1){
-            var previousOrderNumber = currentDeliverable.getOrderNumber() - 1;
+        if (deliverable.get().getOrderNumber()>1){
+            var previousOrderNumber = deliverable.get().getOrderNumber() - 1;
             var previousDeliverable = deliverableRepository.findByProjectIdAndOrderNumber(
-                    currentDeliverable.getProjectId(), previousOrderNumber);
+                    deliverable.get().getProjectId(), previousOrderNumber);
 
             if (previousDeliverable.isEmpty()) {
                 throw new IllegalArgumentException("You can't upload this deliverable because the previous one doesn't exist");
@@ -147,38 +146,46 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
             throw new IllegalArgumentException();
         }
 
+        var currentDeliverable = deliverable.get();
+
         //if there's no files/developerMessage from the developer
-        if(deliverable.get().getDeveloperDescription()==null){
+        if(currentDeliverable.getDeveloperDescription()==null){
             throw new DeliverableWithoutUploadException("There's no upload from the developer");
         }
 
         //if the deliverable was approved before
-        if (deliverable.get().getState() == DeliverableStatus.APPROVED){
+        if (currentDeliverable.getState() == DeliverableStatus.APPROVED){
             throw new DeliverableAlreadyApprovedException("Deliverable is already approved");
         }
 
         //if the status is not WAITING
-        if (deliverable.get().getState() != DeliverableStatus.WAITING) {
+        if (currentDeliverable.getState() != DeliverableStatus.WAITING) {
             throw new IllegalDeliverableStateException("The state must be WAITING");
         }
 
-        if (command.accepted()){
-            // Comunicación con el servicio de Proyectos (comentado):
-            // Aquí se debería realizar una llamada al microservicio de Proyectos para actualizar el progreso del proyecto.
-            // Este paso implica hacer una solicitud al microservicio de Proyectos para actualizar el progreso del proyecto
-            // y posiblemente cambiar el estado del proyecto en función de la lógica de negocio.
+        if (command.accepted()) {
+            currentDeliverable.setState(DeliverableStatus.APPROVED);
+            this.deliverableRepository.save(currentDeliverable);
 
-            // Ejemplo de cómo hacer la comunicación con el microservicio de Proyectos (suponiendo que usamos un cliente Feign):
-            // projectServiceClient.updateProjectProgress(new UpdateProjectProgressCommand(deliverable.get().getProject()));
+            Long projectId = currentDeliverable.getProjectId();
+            long totalDeliverables = deliverableRepository.countByProjectId(projectId);
+            long approvedDeliverables = deliverableRepository.countByProjectIdAndState(projectId, DeliverableStatus.APPROVED);
+            System.out.println("total de deliverables " + totalDeliverables + ", deliverables aprobados: " + approvedDeliverables);
 
-            // Si fuera necesario, se usaría algo como:
-            // new ProjectCommandServiceImpl(projectRepository, deliverableRepository, defaultDeliverableRepository).handle(updateCommand);
 
-            System.out.println("El proyecto es: "+deliverable.get().getProjectId().toString());
-        }else deliverable.get().setState(DeliverableStatus.REJECTED);
+            double progress = ((double) approvedDeliverables / totalDeliverables) * 100.0;
 
-        this.deliverableRepository.save(deliverable.get());
-        return deliverable;
+            projectServiceClient.updateProjectProgress(new UpdateProjectProgressCommand(projectId, progress));
+
+
+            System.out.println("progreso del proyecto: " + progress);
+        } else {
+            currentDeliverable.setState(DeliverableStatus.REJECTED);
+            this.deliverableRepository.save(currentDeliverable);
+        }
+
+
+        return Optional.of(currentDeliverable);
     }
     @Override
     public Optional<Deliverable> handle(UpdateDeliverableCommand command) {
@@ -222,7 +229,7 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         deliverableRepository.delete(deliverable.get());
 
         //to update the order number of the deliverables after deleting one
-        List<Deliverable> deliverables = deliverableRepository.findAllByProjectId(command.projectId());
+        List<Deliverable> deliverables = deliverableRepository.findAllByProjectId(Long.valueOf(command.projectId()));
 
         if (deliverables.isEmpty()) {
             throw new IllegalArgumentException("No deliverables found for the project");
@@ -235,4 +242,3 @@ public class DeliverableCommandServiceImpl implements DeliverableCommandService 
         }
     }
 }
-

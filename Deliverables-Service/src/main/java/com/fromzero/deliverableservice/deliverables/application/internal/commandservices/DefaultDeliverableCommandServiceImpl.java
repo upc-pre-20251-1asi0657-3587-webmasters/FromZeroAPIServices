@@ -2,12 +2,18 @@ package com.fromzero.deliverableservice.deliverables.application.internal.comman
 
 
 import com.fromzero.deliverableservice.deliverables.domain.model.aggregates.DefaultDeliverable;
+import com.fromzero.deliverableservice.deliverables.domain.model.aggregates.Deliverable;
+import com.fromzero.deliverableservice.deliverables.domain.model.commands.CreateDefaultDeliverableCommand;
 import com.fromzero.deliverableservice.deliverables.domain.model.commands.SeedDefaultDeliverablesCommand;
 import com.fromzero.deliverableservice.deliverables.domain.services.DefaultDeliverableCommandService;
+import com.fromzero.deliverableservice.deliverables.domain.valueobjects.DeliverableStatus;
 import com.fromzero.deliverableservice.deliverables.domain.valueobjects.ProjectTypeEnum;
 import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DefaultDeliverableRepository;
+import com.fromzero.deliverableservice.deliverables.infrastructure.persistence.jpa.repositories.DeliverableRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,10 +21,13 @@ import java.util.List;
 public class DefaultDeliverableCommandServiceImpl implements DefaultDeliverableCommandService {
 
     private final DefaultDeliverableRepository defaultDeliverableRepository;
+    private final DeliverableRepository deliverableRepository;
 
-    public DefaultDeliverableCommandServiceImpl(DefaultDeliverableRepository defaultDeliverableRepository) {
+    public DefaultDeliverableCommandServiceImpl(DefaultDeliverableRepository defaultDeliverableRepository, DeliverableRepository deliverableRepository) {
         this.defaultDeliverableRepository = defaultDeliverableRepository;
+        this.deliverableRepository = deliverableRepository;
     }
+
 
     @Override
     public void handle(SeedDefaultDeliverablesCommand command) {
@@ -73,6 +82,31 @@ public class DefaultDeliverableCommandServiceImpl implements DefaultDeliverableC
             defaultDeliverableRepository.saveAll(deliverables);
         }
 
+    }
+
+    @Override
+    public void handle(CreateDefaultDeliverableCommand command) {
+        ProjectTypeEnum projectType = ProjectTypeEnum.valueOf(command.projectType());
+        String projectId = command.projectId();
+
+        List<DefaultDeliverable> defaults = defaultDeliverableRepository.findByProjectTypeEnum(projectType);
+
+        LocalDate today = LocalDate.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
+
+        List<Deliverable> deliverables = defaults.stream().map(d -> {
+            String deadline = today.plusWeeks(d.getWeeksToComplete()).format(formatter) + "T23:59:59";
+            return new Deliverable(
+                    d.getName(),
+                    d.getDescription(),
+                    deadline,
+                    projectId,
+                    d.getOrderNumber(),
+                    DeliverableStatus.PENDING
+            );
+        }).toList();
+
+        deliverableRepository.saveAll(deliverables);
     }
 
 }

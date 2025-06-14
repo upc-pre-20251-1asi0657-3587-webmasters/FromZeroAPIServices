@@ -10,7 +10,7 @@ import java.util.List;
 
 public record ProjectResource(
         Long id, String name, String description, String state, Double progress,
-        Long ownerId, Long developerId, List<String> candidatesList,
+        String ownerId, String developerId, List<String> candidatesList,
         List<ProgrammingLanguage> languages, List<Framework> frameworks, String type,
         String budget, String methodologies) {
     public ProjectResource{
@@ -20,7 +20,7 @@ public record ProjectResource(
     }
 
     public ProjectResource(Long id,String name, String description, String state,
-                           Double progress, Long ownerId,List<String> candidatesList,
+                           Double progress, String ownerId,List<String> candidatesList,
                            List<ProgrammingLanguage> languages, List<Framework> frameworks,
                            String type,String budget,String methodologies){
         this(id,name,description,state,progress,ownerId,null,candidatesList
