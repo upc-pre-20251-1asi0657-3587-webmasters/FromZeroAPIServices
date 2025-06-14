@@ -11,6 +11,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class DeveloperCommandServiceImpl implements DeveloperCommandService {
@@ -28,13 +29,14 @@ public class DeveloperCommandServiceImpl implements DeveloperCommandService {
         if (developerRepository.existsByDeveloperEmail(developer.getDeveloperEmail())) throw new IllegalArgumentException("Developer email already exists");
         developerRepository.save(developer);
 
-        /*
+
         UserCreatedEvent event = new UserCreatedEvent();
-        event.setName(developer.getDeveloperFirstName().toString());
-        event.setEmail(developer.getDeveloperEmail().toString());
+        event.setUserId(developer.getDeveloperId().developerId());
+        event.setName(developer.getDeveloperFirstName().developerFirstName());
+        event.setEmail(developer.getDeveloperEmail().developerEmail());
         event.setRole("Developer");
         userPublisher.publishUserCreatedevent(event);
-        */
+
 
         return developerRepository.findByDeveloperId(developer.getDeveloperId());
     }

@@ -38,16 +38,12 @@ public class SupportTicketController {
 
     @Operation(summary = "Create Support Ticket")
     @PostMapping
-    public ResponseEntity<SupportTicketResource>createSupportTicket(@RequestBody CreateSupportTicketResource resource, Long id){
-        var recipientUser = id;
-        if(recipientUser == null){
-            return ResponseEntity.badRequest().build();
-        }
-        var createSupportTicketCommand = CreateSupportTicketCommandFromResourceAsembler.toCommandFromResource(resource, recipientUser);
+    public ResponseEntity<SupportTicketResource>createSupportTicket(@RequestBody CreateSupportTicketResource resource){
+        var createSupportTicketCommand = CreateSupportTicketCommandFromResourceAsembler.toCommandFromResource(resource);
         var supportTicket = this.supportTicketCommandService.handle(createSupportTicketCommand);
-        if(supportTicket.isEmpty()){
-            return ResponseEntity.badRequest().build();
-        }
+//        if(supportTicket.isEmpty()){
+//            return ResponseEntity.badRequest().build();
+//        }
         var supportTicketResource = SupportTicketResourceFromEntityAssembler.toResourceFromEntity(supportTicket.get());
         return new ResponseEntity<>(supportTicketResource, HttpStatus.CREATED);
     }

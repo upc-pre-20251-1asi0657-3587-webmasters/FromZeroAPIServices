@@ -26,14 +26,16 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final HashingService hashingService;
     private final TokenService tokenService;
+    private final AuthPublisher authPublisher;
 
     private final UserProfileGateway userProfileGateway;
 
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, AuthPublisher authPublisher, UserProfileGateway userProfileGateway) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, AuthPublisher authPublisher, AuthPublisher authPublisher1, UserProfileGateway userProfileGateway) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
+        this.authPublisher = authPublisher1;
         this.userProfileGateway = userProfileGateway;
     }
 
@@ -49,7 +51,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail(), signUpDeveloperCommand.userFirstName(), signUpDeveloperCommand.userLastName());
+
+        // Publish account created event
+        var accountCreatedEvent = new AccountCreatedEvent();
+        accountCreatedEvent.setUserEmail(user.getUserEmail());
+        accountCreatedEvent.setUserId(user.getUserId());
 
         return userRepository.findById(user.getUserId());
     }
@@ -66,7 +73,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail(), signUpEnterpriseCommand.enterpriseName());
 
         return userRepository.findById(user.getUserId());
     }

@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseCountry(String enterpriseCountry) {
-    public EnterpriseCountry() { this(null); }
+    public EnterpriseCountry() { this("No country provided"); }
 
     public EnterpriseCountry {
         if (enterpriseCountry == null || enterpriseCountry.isBlank()) {

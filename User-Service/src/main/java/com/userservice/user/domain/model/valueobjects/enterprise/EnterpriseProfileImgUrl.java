@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseProfileImgUrl(String enterpriseProfileImgUrl) {
-    public EnterpriseProfileImgUrl() { this(null); }
+    public EnterpriseProfileImgUrl() { this("https://cdn-icons-png.flaticon.com/512/3237/3237472.png"); }
 
     public EnterpriseProfileImgUrl {
         if (enterpriseProfileImgUrl == null || enterpriseProfileImgUrl.isBlank()) {

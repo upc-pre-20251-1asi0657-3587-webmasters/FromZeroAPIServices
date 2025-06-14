@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseEmail(String enterpriseEmail) {
-    public EnterpriseEmail() { this(null); }
+    public EnterpriseEmail() { this("No email provided"); }
 
     public EnterpriseEmail {
         if (enterpriseEmail == null || enterpriseEmail.isBlank()) {

@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record DeveloperFirstName(String developerFirstName) {
-    public DeveloperFirstName() { this(null); }
+    public DeveloperFirstName() { this("Not first name provided"); }
 
     public DeveloperFirstName {
         if (developerFirstName == null || developerFirstName.isBlank()) {

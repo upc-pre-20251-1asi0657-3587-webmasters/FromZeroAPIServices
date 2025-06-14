@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record DeveloperProfileImgUrl(String developerProfileImgUrl) {
-    public DeveloperProfileImgUrl() { this(null); }
+    public DeveloperProfileImgUrl() { this("https://hwqkibwyspmfwkzjlumy.supabase.co/storage/v1/object/public/profile/profile.png"); }
 
     public DeveloperProfileImgUrl {
         if (developerProfileImgUrl == null || developerProfileImgUrl.isBlank()) {
