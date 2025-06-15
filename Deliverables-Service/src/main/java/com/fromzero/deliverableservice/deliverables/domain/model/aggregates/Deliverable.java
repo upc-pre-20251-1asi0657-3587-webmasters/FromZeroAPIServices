@@ -22,7 +22,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
     private String description;
 
     @Column(nullable = false)
-    private LocalDateTime deadline;
+    private LocalDateTime deadline; //format: "2025-08-15T14:30:45"
 
     @Column(nullable = false)
     private DeliverableStatus state;
@@ -35,7 +35,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String developerDescription;
+    private String developerDescription; // Descripcion dada por el developer
 
     @Column(nullable = false)
     private int orderNumber;

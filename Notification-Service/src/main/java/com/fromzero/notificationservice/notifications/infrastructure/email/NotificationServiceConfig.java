@@ -2,10 +2,12 @@ package com.fromzero.notificationservice.notifications.infrastructure.email;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,5 +36,12 @@ public class NotificationServiceConfig {
         converter.setTypeIdMappings(typeIdMappings);
 
         return converter;
+    }
+
+    @Bean
+    @LoadBalanced
+
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }

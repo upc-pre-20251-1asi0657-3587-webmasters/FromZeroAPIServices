@@ -114,6 +114,7 @@ public class ProjectController {
         var project = this.projectQueryService.handle(getProjectByIdQuery);
         if (project.isEmpty()) return ResponseEntity.badRequest().build();
         var projectResource = ProjectResourceFromEntityAssembler.toResourceFromEntity(project.get());
+        project.ifPresent(p -> System.out.println("Raw Project Entity: " + p));
         return ResponseEntity.ok(projectResource);
     }
 
