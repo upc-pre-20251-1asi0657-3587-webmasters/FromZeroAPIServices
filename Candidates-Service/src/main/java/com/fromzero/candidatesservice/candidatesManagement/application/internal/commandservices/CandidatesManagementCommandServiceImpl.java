@@ -70,7 +70,8 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
         candidateRepository.save(candidate);
 
         DeveloperSelectedEvent event = new DeveloperSelectedEvent();
-        event.setDeveloperId(String.valueOf(candidate.getCandidateId()));
+        event.setCandidateId(String.valueOf(candidate.getCandidateId()));
+        event.setDeveloperId(String.valueOf(candidate.getDeveloperId()));
         event.setProjectId(candidate.getProjectId());
         candidatesPublisher.publishSelected(event);
 

@@ -9,6 +9,7 @@ import lombok.Setter;
 public class DeveloperSelectedEvent {
     private Long projectId;
     private String developerId;
+    private String candidateId;
 
     public DeveloperSelectedEvent() {
 

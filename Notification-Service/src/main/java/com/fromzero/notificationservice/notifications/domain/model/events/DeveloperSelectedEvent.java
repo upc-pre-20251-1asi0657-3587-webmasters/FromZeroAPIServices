@@ -1,4 +1,4 @@
-package com.fromzero.candidatesservice.candidatesManagement.domain.model.events;
+package com.fromzero.notificationservice.notifications.domain.model.events;
 
 
 import lombok.Getter;

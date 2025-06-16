@@ -17,7 +17,7 @@ public class DeveloperAppliedListener {
         this.projectRepository = projectRepository;
     }
 
-    @JmsListener(destination = "developer.applied")
+    @JmsListener(destination = "developer.applied", containerFactory = "topicListenerFactory")
     public void onCandidateApplied(DeveloperAppliedEvent event) {
         Long projectId = event.getProjectId();
         UUID candidateId = UUID.fromString(event.getDeveloperId());
