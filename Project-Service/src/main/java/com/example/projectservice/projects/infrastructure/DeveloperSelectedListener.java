@@ -17,17 +17,17 @@ public class DeveloperSelectedListener {
         this.projectRepository = projectRepository;
     }
 
-    @JmsListener(destination = "developer.selected")
+    @JmsListener(destination = "developer.selected", containerFactory = "topicListenerFactory")
     public void onDeveloperSelected(DeveloperSelectedEvent event) {
         Project project = projectRepository.findById(event.getProjectId())
                 .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + event.getProjectId()));
 
 
-        project.setDeveloper(event.getDeveloperId());
+        project.setDeveloper(event.getCandidateId());
         project.setState(ProjectStateEnum.IN_PROCESS);
 
         projectRepository.save(project);
 
-        System.out.println("Developer " + event.getDeveloperId() + " assigned to project " + event.getProjectId());
+        System.out.println("Developer " + event.getCandidateId() + " assigned to project " + event.getProjectId());
     }
 }

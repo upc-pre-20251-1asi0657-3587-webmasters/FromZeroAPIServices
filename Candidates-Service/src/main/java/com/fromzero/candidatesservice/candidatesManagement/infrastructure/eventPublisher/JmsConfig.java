@@ -3,8 +3,10 @@ package com.fromzero.candidatesservice.candidatesManagement.infrastructure.event
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import jakarta.jms.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
 
@@ -25,5 +27,13 @@ public class JmsConfig {
         converter.setObjectMapper(objectMapper);
 
         return converter;
+    }
+
+    @Bean
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory) {
+        JmsTemplate template = new JmsTemplate(connectionFactory);
+        template.setPubSubDomain(true); // Esto es clave para enviar a topics
+        template.setMessageConverter(jacksonJmsMessageConverter());
+        return template;
     }
 }

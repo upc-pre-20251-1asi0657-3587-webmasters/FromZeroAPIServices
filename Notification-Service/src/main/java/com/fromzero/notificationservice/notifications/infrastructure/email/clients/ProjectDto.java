@@ -9,5 +9,6 @@ import lombok.Setter;
 public class ProjectDto {
     private String developerId; // UUID as String
     private String name;
+    private String ownerId; // UUID as String
     // other fields as needed
 }
