@@ -4,16 +4,18 @@ import com.sendgrid.helpers.mail.Mail;
 import com.sendgrid.helpers.mail.objects.Email;
 import com.sendgrid.helpers.mail.objects.Personalization;
 import com.sendgrid.*;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
 
-
+@Component
 public class EmailSender {
-    public void sendEmail(Email email) throws IOException {
+    public void sendEmail(String email, String subject, String header, String mainText, String subtext) throws IOException {
         String apiKey = System.getenv("SENDGRID_API_KEY");
         String templateId = System.getenv("SENDGRID_TEMPLATE_ID");
 
         Email from = new Email("fromzeronotificationservice@gmail.com");
-        Email to = new Email("jairvelazpizar@gmail.com");
+        Email to = new Email(email);
         Mail mail = new Mail();
         mail.setFrom(from);
         mail.setTemplateId(templateId); // Reemplaza con tu Template ID
@@ -21,10 +23,10 @@ public class EmailSender {
         // Configurar datos dinámicos
         Personalization personalization = new Personalization();
         personalization.addTo(to);
-        personalization.addDynamicTemplateData("header", "Hola Papu");
-        personalization.addDynamicTemplateData("text", "Apreta el boton para baile sensual");
-        personalization.addDynamicTemplateData("text2", "Osi q rico");
-        personalization.setSubject("Ataque Balatrero");
+        personalization.addDynamicTemplateData("header", header);
+        personalization.addDynamicTemplateData("text", mainText);
+        personalization.addDynamicTemplateData("text2", subtext);
+        personalization.setSubject(subject);
         mail.addPersonalization(personalization);
 
         SendGrid sg = new SendGrid(apiKey); // Reemplaza con tu API Key

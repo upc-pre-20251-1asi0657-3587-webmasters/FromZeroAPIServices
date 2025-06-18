@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterprisePhone(String enterprisePhone) {
-    public EnterprisePhone() { this(null); }
+    public EnterprisePhone() { this("No phone provided"); }
 
     public EnterprisePhone {
         if (enterprisePhone == null || enterprisePhone.isBlank()) {

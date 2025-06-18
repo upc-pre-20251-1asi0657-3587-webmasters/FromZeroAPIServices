@@ -22,7 +22,7 @@ public class DeliverableQueryServiceImpl implements DeliverableQueryService {
 
     @Override
     public List<Deliverable> handle(GetAllDeliverablesByProjectIdQuery query) {
-        return this.deliverableRepository.findAllByProjectId(query.projectId());
+        return this.deliverableRepository.findAllByProjectId(Long.valueOf(query.projectId()));
     }
 
     @Override

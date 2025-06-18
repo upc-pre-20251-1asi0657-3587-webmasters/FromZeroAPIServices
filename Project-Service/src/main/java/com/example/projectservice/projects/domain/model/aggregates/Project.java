@@ -29,13 +29,23 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
     private Double progress;
 
     @Column(nullable = false)
-    private Long enterprise;
+    private String enterprise;
 
-    @Column(nullable = false)
-    private Long developer;
+    @Column(name = "developer_id")
+    private String developerId;
 
     @Column
     private List<String> candidates = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", developerId='" + developerId + '\'' +
+                // add other fields as needed
+                '}';
+    }
 
     // many-to-many relationship
     @ManyToMany(fetch = FetchType.EAGER)
@@ -73,7 +83,7 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
         this.state = ProjectStateEnum.LOOKING_FOR_DEVELOPERS;
         this.progress = 0.0;
         this.enterprise = command.enterprise();
-        this.developer = null;
+        this.developerId = null;
         this.languages = new ArrayList<>();
         this.frameworks = new ArrayList<>();
         this.type = command.type();
@@ -133,20 +143,20 @@ public class Project extends AuditableAbstractAggregateRoot<Project> {
         this.progress = progress;
     }
 
-    public Long getEnterprise() {
+    public String getEnterprise() {
         return enterprise;
     }
 
-    public void setEnterprise(Long enterprise) {
+    public void setEnterprise(String enterprise) {
         this.enterprise = enterprise;
     }
 
-    public Long getDeveloper() {
-        return developer;
+    public String getDeveloper() {
+        return this.developerId;
     }
 
-    public void setDeveloper(Long developer) {
-        this.developer = developer;
+    public void setDeveloper(String developer) {
+        this.developerId = developer;
     }
 
     public List<String> getCandidates() {

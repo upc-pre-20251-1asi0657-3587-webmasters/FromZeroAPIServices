@@ -5,6 +5,6 @@ import com.authservice.iam.interfaces.rest.resources.SignInResource;
 
 public class SignInCommandFromResourceAssembler {
     public static SignInCommand toCommandFromResource(SignInResource signInResource) {
-        return new SignInCommand(signInResource.userEmail(), signInResource.userPassword());
+        return new SignInCommand(signInResource.userEmail(), signInResource.password());
     }
 }

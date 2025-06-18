@@ -48,6 +48,14 @@ public class Enterprise {
     public Enterprise(CreateEnterpriseCommand createEnterpriseCommand) {
         this.enterpriseId = new EnterpriseId(createEnterpriseCommand.enterpriseId());
         this.enterpriseEmail = new EnterpriseEmail(createEnterpriseCommand.enterpriseEmail());
+        this.enterpriseName = new EnterpriseName(createEnterpriseCommand.enterpriseName());
+        this.enterpriseDescription = new EnterpriseDescription();
+        this.enterpriseCountry = new EnterpriseCountry();
+        this.enterpriseRuc = new EnterpriseRuc();
+        this.enterprisePhone = new EnterprisePhone();
+        this.enterpriseWebsite = new EnterpriseWebsite();
+        this.enterpriseProfileImgUrl = new EnterpriseProfileImgUrl();
+        this.enterpriseSector = new EnterpriseSector();
     }
 
     public Enterprise updateInformation(UpdateEnterpriseCommand updateEnterpriseCommand) {

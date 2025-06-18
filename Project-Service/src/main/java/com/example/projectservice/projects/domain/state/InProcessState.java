@@ -7,17 +7,17 @@ public class InProcessState implements ProjectState{
 
     @Override
     public void startRecruitmentProcess(Project project) {
-        throw new IllegalStateException("Cannot start recruitment process while project is in process");
+        throw new IllegalStateException("Cannot start recruitment process while projectId is in process");
     }
 
     @Override
     public void startProject(Project project) {
-        throw new IllegalStateException("Cannot start project while project is in process");
+        throw new IllegalStateException("Cannot start projectId while projectId is in process");
     }
 
     @Override
     public void completeProject(Project project) {
-        System.out.println("Completing project " + project.getName());
+        System.out.println("Completing projectId " + project.getName());
         project.setState(ProjectStateEnum.COMPLETED);
 
     }

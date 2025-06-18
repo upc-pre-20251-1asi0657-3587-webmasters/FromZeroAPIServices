@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-// DeliverableCreatedEvent.java
+
 public class DeliverableCreatedEvent {
-    private String userEmail;
+    private Long projectId;
     private String deliverableName;
     private LocalDateTime deadline;
 

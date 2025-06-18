@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseSector(String enterpriseSector) {
-    public EnterpriseSector() { this(null); }
+    public EnterpriseSector() { this("No sector provided"); }
 
     public EnterpriseSector {
         if (enterpriseSector == null || enterpriseSector.isBlank()) {

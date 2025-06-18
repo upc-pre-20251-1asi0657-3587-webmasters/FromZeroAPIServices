@@ -22,7 +22,7 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
     private String description;
 
     @Column(nullable = false)
-    private LocalDateTime deadline;
+    private LocalDateTime deadline; //format: "2025-08-15T14:30:45"
 
     @Column(nullable = false)
     private DeliverableStatus state;
@@ -31,11 +31,11 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
     private String fileUrl;
 
     @Column(nullable = false)
-    private String projectId;
+    private Long projectId;
 
     @Lob
     @Column(columnDefinition = "TEXT")
-    private String developerDescription;
+    private String developerDescription; // Descripcion dada por el developer
 
     @Column(nullable = false)
     private int orderNumber;
@@ -46,10 +46,20 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.deadline = LocalDateTime.parse(command.date());
         this.state = DeliverableStatus.PENDING;
         this.developerDescription = null;
-        this.fileUrl = "https://i.scdn.co/image/ab67616d0000b273fb31e9fdfd96144812da8e5f";
-        this.projectId = command.projectId();
+        this.fileUrl = null;
+        this.projectId = Long.valueOf(command.projectId());
         this.orderNumber = command.orderNumber();
     }
+
+    public Deliverable(String name, String description, String deadline, String projectId, int orderNumber, DeliverableStatus state) {
+        this.name = name;
+        this.description = description;
+        this.deadline = LocalDateTime.parse(deadline);
+        this.projectId = Long.valueOf(projectId);
+        this.orderNumber = orderNumber;
+        this.state = DeliverableStatus.PENDING;
+    }
+
 
     public Deliverable() {}
 
@@ -102,12 +112,12 @@ public class Deliverable extends AuditableAbstractAggregateRoot<Deliverable> {
         this.fileUrl = fileUrl;
     }
 
-    public String getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
     public void setProjectId(String projectId) {
-        this.projectId = projectId;
+        this.projectId = Long.valueOf(projectId);
     }
 
     public String getDeveloperDescription() {

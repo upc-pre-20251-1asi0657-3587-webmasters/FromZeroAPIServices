@@ -8,6 +8,6 @@ import java.util.UUID;
 
 public class UpdateDeveloperCommandFromResourceAssembler {
     public static UpdateDeveloperCommand toCommandFromResource(UUID developerId, UpdateDeveloperResource updateDeveloperResource) {
-        return new UpdateDeveloperCommand(new DeveloperId(developerId), new DeveloperFirstName(updateDeveloperResource.developerFirstName()), new DeveloperLastName(updateDeveloperResource.developerLastName()), new DeveloperEmail(updateDeveloperResource.developerEmail()), new DeveloperDescription(updateDeveloperResource.developerDescription()), new DeveloperPhone(updateDeveloperResource.developerPhone()), new DeveloperCountry(updateDeveloperResource.developerCountry()));
+        return new UpdateDeveloperCommand(new DeveloperId(developerId), new DeveloperFirstName(updateDeveloperResource.firstName()), new DeveloperLastName(updateDeveloperResource.lastName()), new DeveloperEmail(updateDeveloperResource.developerEmail()), new DeveloperDescription(updateDeveloperResource.description()), new DeveloperPhone(updateDeveloperResource.phone()), new DeveloperCountry(updateDeveloperResource.country()), new DeveloperCompletedProjects(0), new DeveloperSpecialties(updateDeveloperResource.specialties()), new DeveloperProfileImgUrl(updateDeveloperResource.profileImgUrl()));
     }
 }

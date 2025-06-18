@@ -34,11 +34,28 @@ public class Developer {
     @Embedded
     private DeveloperCountry developerCountry;
 
+    @Embedded
+    private DeveloperCompletedProjects developerCompletedProjects;
+
+    @Embedded
+    private DeveloperSpecialties developerSpecialties;
+
+    @Embedded
+    private DeveloperProfileImgUrl developerProfileImgUrl;
+
     public Developer() { }
 
     public Developer(CreateDeveloperCommand createDeveloperCommand) {
         this.developerId = new DeveloperId(createDeveloperCommand.developerId());
         this.developerEmail = new DeveloperEmail(createDeveloperCommand.developerEmail());
+        this.developerFirstName = new DeveloperFirstName(createDeveloperCommand.developerFirstName());
+        this.developerLastName = new DeveloperLastName(createDeveloperCommand.developerLastName());
+        this.developerDescription = new DeveloperDescription();
+        this.developerPhone = new DeveloperPhone();
+        this.developerCountry = new DeveloperCountry();
+        this.developerCompletedProjects = new DeveloperCompletedProjects();
+        this.developerSpecialties = new DeveloperSpecialties();
+        this.developerProfileImgUrl = new DeveloperProfileImgUrl();
     }
 
     public Developer updateInformation(UpdateDeveloperCommand updateDeveloperCommand) {
@@ -48,6 +65,9 @@ public class Developer {
         this.developerDescription = updateDeveloperCommand.developerDescription();
         this.developerPhone = updateDeveloperCommand.developerPhone();
         this.developerCountry = updateDeveloperCommand.developerCountry();
+        this.developerCompletedProjects = updateDeveloperCommand.developerCompletedProjects();
+        this.developerSpecialties = updateDeveloperCommand.developerSpecialties();
+        this.developerProfileImgUrl = updateDeveloperCommand.developerProfileImgUrl();
         return this;
     }
 }

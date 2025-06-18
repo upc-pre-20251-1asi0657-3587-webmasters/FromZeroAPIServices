@@ -7,6 +7,7 @@ import com.authservice.iam.domain.events.AccountCreatedEvent;
 import com.authservice.iam.domain.exceptions.InvalidCredentialsException;
 import com.authservice.iam.domain.exceptions.UserAlreadyExistsException;
 import com.authservice.iam.domain.model.aggregates.User;
+import com.authservice.iam.domain.model.commands.RefreshTokenCommand;
 import com.authservice.iam.domain.model.commands.SignInCommand;
 import com.authservice.iam.domain.model.commands.SignUpDeveloperCommand;
 import com.authservice.iam.domain.model.commands.SignUpEnterpriseCommand;
@@ -25,14 +26,16 @@ public class UserCommandServiceImpl implements UserCommandService {
     private final RoleRepository roleRepository;
     private final HashingService hashingService;
     private final TokenService tokenService;
+    private final AuthPublisher authPublisher;
 
     private final UserProfileGateway userProfileGateway;
 
-    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, AuthPublisher authPublisher, UserProfileGateway userProfileGateway) {
+    public UserCommandServiceImpl(UserRepository userRepository, RoleRepository roleRepository, HashingService hashingService, TokenService tokenService, AuthPublisher authPublisher, AuthPublisher authPublisher1, UserProfileGateway userProfileGateway) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.hashingService = hashingService;
         this.tokenService = tokenService;
+        this.authPublisher = authPublisher1;
         this.userProfileGateway = userProfileGateway;
     }
 
@@ -48,7 +51,12 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail());
+        userProfileGateway.createDeveloperProfile(user.getUserId(), user.getUserEmail(), signUpDeveloperCommand.userFirstName(), signUpDeveloperCommand.userLastName());
+
+        // Publish account created event
+        var accountCreatedEvent = new AccountCreatedEvent();
+        accountCreatedEvent.setUserEmail(user.getUserEmail());
+        accountCreatedEvent.setUserId(user.getUserId());
 
         return userRepository.findById(user.getUserId());
     }
@@ -65,8 +73,7 @@ public class UserCommandServiceImpl implements UserCommandService {
 
         userRepository.save(user);
 
-        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail());
-
+        userProfileGateway.createEnterpriseProfile(user.getUserId(), user.getUserEmail(), signUpEnterpriseCommand.enterpriseName());
 
         return userRepository.findById(user.getUserId());
     }
@@ -77,7 +84,16 @@ public class UserCommandServiceImpl implements UserCommandService {
         if (!hashingService.matches(signInCommand.userPassword(), user.getUserPassword())) {
             throw new InvalidCredentialsException();
         }
-        var token = tokenService.generateToken(user);
+        var token = tokenService.generateToken(user.getUserEmail());
         return Optional.of(new ImmutablePair<>(user, token));
+    }
+
+    @Override
+    public Optional<ImmutablePair<User, String>> handle(RefreshTokenCommand command) {
+        String username = tokenService.getUsernameFromToken(command.token());
+        var user = userRepository.findByUserEmail(username);
+        if (user.isEmpty()) throw new RuntimeException("User not found");
+        var token = tokenService.generateToken(user.get().getUserEmail());
+        return Optional.of(ImmutablePair.of(user.get(), token));
     }
 }

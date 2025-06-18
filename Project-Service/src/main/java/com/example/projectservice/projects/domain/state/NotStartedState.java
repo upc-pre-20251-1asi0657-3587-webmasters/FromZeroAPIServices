@@ -14,11 +14,11 @@ public class NotStartedState implements ProjectState {
 
     @Override
     public void startProject(Project project) {
-        throw new IllegalStateException("Can't start project before recruitment.");
+        throw new IllegalStateException("Can't start projectId before recruitment.");
     }
 
     @Override
     public void completeProject(Project project) {
-        throw new IllegalStateException("Can't complete project before starting.");
+        throw new IllegalStateException("Can't complete projectId before starting.");
     }
 }

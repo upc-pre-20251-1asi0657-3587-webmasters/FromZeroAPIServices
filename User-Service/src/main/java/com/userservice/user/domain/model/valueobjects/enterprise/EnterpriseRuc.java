@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record EnterpriseRuc(String enterpriseRuc) {
-    public EnterpriseRuc() { this(null); }
+    public EnterpriseRuc() { this("No ruc provided"); }
 
     public EnterpriseRuc {
         if (enterpriseRuc == null ||  enterpriseRuc.isBlank()) {

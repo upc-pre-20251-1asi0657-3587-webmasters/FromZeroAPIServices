@@ -7,7 +7,7 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.4.5</version>
 	</parent>
-	<groupId>com.agrocontrol.msvc-eureka</groupId>
+	<groupId>com.fromzero.backend</groupId>
 	<artifactId>Eureka-Service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Eureka-Service</name>

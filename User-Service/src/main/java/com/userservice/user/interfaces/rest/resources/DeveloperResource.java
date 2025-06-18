@@ -1,4 +1,4 @@
 package com.userservice.user.interfaces.rest.resources;
 
-public record DeveloperResource(String developerFirstName, String developerLastName, String developerEmail, String developerDescription, String developerPhone, String developerCountry) {
+public record DeveloperResource(String id, String firstName, String lastName, String developerEmail, String description, String country, String phone, String specialties, String profileImgUrl) {
 }

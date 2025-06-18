@@ -4,7 +4,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record DeveloperEmail(String developerEmail) {
-    public DeveloperEmail() { this(null); };
+    public DeveloperEmail() { this("Not email provided"); };
 
     public DeveloperEmail {
         if (developerEmail == null || developerEmail.isBlank()) {

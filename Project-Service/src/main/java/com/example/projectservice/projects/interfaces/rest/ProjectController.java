@@ -4,6 +4,7 @@ import com.example.projectservice.projects.domain.model.aggregates.Framework;
 import com.example.projectservice.projects.domain.model.aggregates.ProgrammingLanguage;
 import com.example.projectservice.projects.domain.model.commands.CreateProjectCommand;
 import com.example.projectservice.projects.domain.model.commands.DeleteProjectCommand;
+import com.example.projectservice.projects.domain.model.commands.UpdateProjectProgressCommand;
 import com.example.projectservice.projects.domain.model.queries.*;
 import com.example.projectservice.projects.domain.services.FrameworksQueryService;
 import com.example.projectservice.projects.domain.services.ProgrammingLanguagesQueryService;
@@ -17,6 +18,7 @@ import com.example.projectservice.projects.interfaces.rest.transform.ProjectReso
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -77,14 +79,15 @@ public class ProjectController {
         return frameworksList;
     }
 
-    @Operation(summary = "Create project")
+    @Operation(summary = "Create projectId")
     @PostMapping
     public ResponseEntity<CreateProjectResource> createProject(@RequestBody CreateProjectResource resource) {
-        var enterprise = this.profileContextFacade.getEnterpriseByUserId(resource.ownerId());
-        if (enterprise == null) return ResponseEntity.badRequest().build();
+        // NOTE: For the moment we are not validating the ownerId
+//        var enterprise = this.profileContextFacade.getEnterpriseByUserId(resource.ownerId());
+//        if (enterprise == null) return ResponseEntity.badRequest().build();
         var programmingLanguages = getProgrammingLanguages(resource.languages());
         var frameworks=getFrameworks(resource.frameworks());
-        var createProjectCommand = new CreateProjectCommand(resource.name(), resource.description(), enterprise,
+        var createProjectCommand = new CreateProjectCommand(resource.name(), resource.description(), resource.ownerId(),
                 programmingLanguages,frameworks,resource.type(),resource.budget(),resource.methodologies());
         var project = this.projectCommandService.handle(createProjectCommand);
         if (project.isEmpty()) return ResponseEntity.badRequest().build();
@@ -111,15 +114,16 @@ public class ProjectController {
         var project = this.projectQueryService.handle(getProjectByIdQuery);
         if (project.isEmpty()) return ResponseEntity.badRequest().build();
         var projectResource = ProjectResourceFromEntityAssembler.toResourceFromEntity(project.get());
+        project.ifPresent(p -> System.out.println("Raw Project Entity: " + p));
         return ResponseEntity.ok(projectResource);
     }
 
     @Operation(summary = "Get All Projects By Enterprise Id")
     @GetMapping(value = "/enterprise/{enterpriseUserId}")
-    public ResponseEntity<List<ProjectResource>> getAllProjectsByEnterpriseId(@PathVariable Long enterpriseUserId){
-        var enterprise = this.profileContextFacade.getEnterpriseByUserId(enterpriseUserId);
-        if(enterprise==null) return ResponseEntity.badRequest().build();
-        var getProjectsByEnterpriseIdQuery = new GetAllProjectsByEnterpriseIdQuery(enterprise);
+    public ResponseEntity<List<ProjectResource>> getAllProjectsByEnterpriseId(@PathVariable String enterpriseUserId){
+//        var enterprise = this.profileContextFacade.getEnterpriseByUserId(enterpriseUserId);
+//        if(enterprise==null) return ResponseEntity.badRequest().build();
+        var getProjectsByEnterpriseIdQuery = new GetAllProjectsByEnterpriseIdQuery(enterpriseUserId);
         var projects =this.projectQueryService.handle(getProjectsByEnterpriseIdQuery);
         var projectResources = projects.stream()
                 .map(ProjectResourceFromEntityAssembler::toResourceFromEntity)
@@ -127,7 +131,7 @@ public class ProjectController {
         return ResponseEntity.ok(projectResources);
     }
 
-    @Operation(summary = "Delete a project by Id")
+    @Operation(summary = "Delete a projectId by Id")
     @DeleteMapping(value = "/{projectId}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long projectId) {
         var getProjectByIdQuery = new GetProjectByIdQuery(projectId);
@@ -136,6 +140,13 @@ public class ProjectController {
         var deleteProjectCommand = new DeleteProjectCommand(project.get().getId());
         this.projectCommandService.handle(deleteProjectCommand);
         return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Update project progress")
+    @PutMapping( value= "/update-progress", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Void> updateProjectProgress(@RequestBody UpdateProjectProgressCommand command) {
+        projectCommandService.handle(command);
+        return ResponseEntity.ok().build();
     }
 
 }

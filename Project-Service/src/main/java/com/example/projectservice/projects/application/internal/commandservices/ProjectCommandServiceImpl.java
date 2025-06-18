@@ -6,90 +6,74 @@ import com.example.projectservice.projects.domain.model.commands.DeleteProjectCo
 import com.example.projectservice.projects.domain.model.commands.UpdateProjectProgressCommand;
 import com.example.projectservice.projects.domain.services.ProjectCommandService;
 import com.example.projectservice.projects.domain.valueobjects.ProjectStateEnum;
-import com.example.projectservice.projects.domain.valueobjects.ProjectTypeEnum;
 import com.example.projectservice.projects.infrastructure.persistence.jpa.repositories.ProjectRepository;
+import com.example.projectservice.projects.interfaces.rest.resources.CreateDefaultDeliverablesResource;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProjectCommandServiceImpl implements ProjectCommandService {
 
     private final ProjectRepository projectRepository;
+    private final RestTemplate restTemplate;
 
-    public ProjectCommandServiceImpl(ProjectRepository projectRepository) {
+    public ProjectCommandServiceImpl(ProjectRepository projectRepository, RestTemplate restTemplate) {
         this.projectRepository = projectRepository;
+        this.restTemplate = restTemplate;
     }
 
     @Override
     public Optional<Project> handle(CreateProjectCommand command) {
-
+        System.out.println("ejecutando create projectId command");
         var project = new Project(command);
         this.projectRepository.save(project);
 
         project.getLanguages().addAll(command.languages());
         project.getFrameworks().addAll(command.frameworks());
 
-        // NOTE: Aquí se haría la integración con el servicio de Deliverables.
-        // Por ejemplo, podríamos hacer una llamada REST al servicio de Deliverables
-        // para crear los deliverables asociados al proyecto.
-        // Al realizar esta llamada, deberíamos manejar la respuesta y la posible excepción si el servicio de Deliverables falla.
 
-        // List<Deliverable> deliverables = deliverableService.createDeliverablesForProject(project);
-        // deliverableRepository.saveAll(deliverables);
+        try {
+            System.out.println("TIPO DE PROYECTO: "+project.getType());
+            System.out.println("ID DEL PROYECTO: "+project.getId());
 
-        this.projectRepository.save(project);
+            String url = "http://deliverables-service/api/v1/default-deliverables";
+            CreateDefaultDeliverablesResource request = new CreateDefaultDeliverablesResource(project.getId().toString(), project.getType().toString());
+            restTemplate.postForEntity(url, request, Void.class);
+
+            System.out.println("Deliverables por defecto creados con éxito.");
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            System.err.println("HTTP Error creating default deliverables: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
+        } catch (Exception e) {
+            System.err.println("Error al conectar con el servicio de deliverables " + e.getMessage());
+        }
+
         return Optional.of(project);
     }
-
-    // NOTE: Esta logica deberia pasarse como una peticion al servicio de deliverables
-    // para que este se encargue de crear los deliverables y almacenarnos, se puede enviar el UUID del projecto
-    // y su tipo.
-    // private List<Deliverable> addDefaultDeliverables(ProjectTypeEnum projectTypeEnum, Project project) {
-    //     List<DefaultDeliverable> defaults = defaultDeliverableRepository.findByProjectTypeEnum(projectTypeEnum);
-    //     LocalDate today = LocalDate.now();
-    //     DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE;
-    //     return defaults.stream().map(d -> {
-    //         // to create de deadline date
-    //         String deadline = today.plusWeeks(d.getWeeksToComplete()).format(formatter) + "T23:59:59";
-    //         CreateDeliverableCommand deliverableCommand  = new CreateDeliverableCommand(
-    //                 d.getName(),
-    //                 d.getDescription(),
-    //                 deadline,
-    //                 project.getId(),
-    //                 d.getOrderNumber()
-    //         );
-    //         Deliverable deliverable = new Deliverable(deliverableCommand, project);
-    //         deliverableRepository.save(deliverable);
-    //         return deliverable;
-    //     }).toList();
-    // }
 
     @Override
     public Optional<Project> handle(UpdateProjectProgressCommand command) {
-        var project = command.project();
-        project.setProgress(command.progress());
+        var project = projectRepository.findById(command.projectId());
+        if (project.isEmpty()) throw new IllegalArgumentException("Project not found");
 
-        // NOTE: Dependiendo de la lógica de deliverables que se tenga, podríamos agregar una validación
-        // para verificar si todos los deliverables han sido aprobados, lo que cambiaría el estado del proyecto.
-        // boolean allDeliverablesApproved = deliverableRepository.findAllByProject(project)
-        //         .stream()
-        //         .allMatch(deliverable -> {
-        //             return deliverable.getState() == DeliverableStatus.APPROVED;
-        //         });
-        //
-        // if (allDeliverablesApproved) {
-        //     project.getStateHandler().completeProject(project);
-        //     //project.setState(ProjectStateEnum.COMPLETED);
-        // }
+        var actualProject = project.get();
+        actualProject.setProgress(command.progress());
 
-        this.projectRepository.save(project);
-        return Optional.of(project);
+        if (command.progress() >= 100.0) {
+            actualProject.setState(ProjectStateEnum.COMPLETED);
+        }
+
+        System.out.println("estado del proyecto: " + actualProject.getState());
+
+        projectRepository.save(actualProject);
+        return Optional.of(actualProject);
     }
+
 
     @Override
     @Transactional
@@ -98,20 +82,20 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
                 .orElseThrow(() -> new IllegalArgumentException("Project not found"));
 
 
-        //if the project's state is COMPLETED or IN PROCESS
+        //if the projectId's state is COMPLETED or IN PROCESS
         if (project.getState() == ProjectStateEnum.COMPLETED || project.getState() == ProjectStateEnum.IN_PROCESS) {
-            throw new IllegalArgumentException("Cannot delete a completed or an in process project");
+            throw new IllegalArgumentException("Cannot delete a completed or an in process projectId");
         }
 
-        //if the project have a developer working on it
+        //if the projectId have a developer working on it
         if(project.getDeveloper() != null) {
-            throw new IllegalArgumentException("Cannot delete a project with an assigned developer");
+            throw new IllegalArgumentException("Cannot delete a projectId with an assigned developer");
         }
 
 
         // NOTE: Aquí también podemos agregar la lógica de comunicación con el servicio de Deliverables
         // para eliminar o actualizar los deliverables antes de eliminar el proyecto si es necesario.
-        // deliverableService.deleteDeliverablesForProject(project);
+        // deliverableService.deleteDeliverablesForProject(projectId);
 
         this.projectRepository.delete(project);
     }

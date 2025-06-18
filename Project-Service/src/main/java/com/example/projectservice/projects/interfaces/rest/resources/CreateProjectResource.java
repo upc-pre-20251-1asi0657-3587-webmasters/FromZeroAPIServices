@@ -9,7 +9,7 @@ import java.util.List;
 public record CreateProjectResource(
         String name,
         String description,
-        Long ownerId,
+        String ownerId,
         List<Long> languages,
         List<Long> frameworks,
         ProjectTypeEnum type,

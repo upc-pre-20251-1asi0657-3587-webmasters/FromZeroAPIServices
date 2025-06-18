@@ -14,15 +14,15 @@ public class LookingForDeveloperState implements ProjectState {
     @Override
     public void startProject(Project project) {
         if (project.getDeveloper() == null) {
-            throw new IllegalStateException("Can't start project without a developer assigned");
+            throw new IllegalStateException("Can't start projectId without a developer assigned");
         }
 
-       System.out.println("Starting project " + project.getName());
+       System.out.println("Starting projectId " + project.getName());
         project.setState(ProjectStateEnum.IN_PROCESS);
     }
 
     @Override
     public void completeProject(Project project) {
-        throw new IllegalStateException("Cannot complete project while looking for developers");
+        throw new IllegalStateException("Cannot complete projectId while looking for developers");
     }
 }
