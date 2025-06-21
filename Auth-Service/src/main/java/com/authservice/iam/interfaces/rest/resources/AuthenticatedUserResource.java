@@ -1,4 +1,6 @@
 package com.authservice.iam.interfaces.rest.resources;
 
-public record AuthenticatedUserResource(String id, String userEmail, String roles, String token) {
+import java.util.List;
+
+public record AuthenticatedUserResource(String id, String userEmail, List<String> roles, String token) {
 }
