@@ -1,4 +1,6 @@
 package com.authservice.iam.interfaces.rest.resources;
 
-public record DeveloperResource(String id, String userEmail, String roles) {
+import java.util.List;
+
+public record DeveloperResource(String id, String userEmail, List<String> roles) {
 }
