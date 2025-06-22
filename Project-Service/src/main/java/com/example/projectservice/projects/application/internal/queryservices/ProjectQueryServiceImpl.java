@@ -2,10 +2,7 @@ package com.example.projectservice.projects.application.internal.queryservices;
 
 
 import com.example.projectservice.projects.domain.model.aggregates.Project;
-import com.example.projectservice.projects.domain.model.queries.GetAllProjectsByEnterpriseIdQuery;
-import com.example.projectservice.projects.domain.model.queries.GetAllProjectsByStateQuery;
-import com.example.projectservice.projects.domain.model.queries.GetAllProjectsQuery;
-import com.example.projectservice.projects.domain.model.queries.GetProjectByIdQuery;
+import com.example.projectservice.projects.domain.model.queries.*;
 import com.example.projectservice.projects.domain.services.ProjectQueryService;
 import com.example.projectservice.projects.infrastructure.persistence.jpa.repositories.ProjectRepository;
 import org.springframework.stereotype.Service;
@@ -35,10 +32,10 @@ public class ProjectQueryServiceImpl implements ProjectQueryService {
         return this.projectRepository.findById(query.id());
     }
 
-//    @Override
-//    public List<Project> handle(GetAllProjectsByDeveloperIdQuery query) {
-//        return this.projectRepository.findAllCandidatesByProjectId(query.developer());
-//    }
+    @Override
+    public List<Project> handle(GetAllProjectsByDeveloperIdQuery query) {
+        return this.projectRepository.findAllByDeveloperId(query.developerId());
+    }
 
     @Override
     public List<Project> handle(GetAllProjectsByEnterpriseIdQuery query) {

@@ -1,6 +1,7 @@
 package com.fromzero.candidatesservice.candidatesManagement.interfaces.rest;
 
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.ApplyToProjectCommand;
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateByDeveloperIdCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.queries.GetAllCandidatesByProjectIdQuery;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateCommandService;
@@ -48,9 +49,9 @@ public class CandidatesManagementController {
     }
 
     @Operation(summary = "Select a candidate for a project")
-    @PatchMapping("/project/{projectId}/candidate/{candidateId}/select")
-    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID candidateId) {
-        var command = new SelectCandidateCommand(candidateId, projectId);
+    @PatchMapping("/project/{projectId}/candidate/{developerId}/select")
+    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID developerId) {
+        var command = new SelectCandidateByDeveloperIdCommand(developerId, projectId);
         var candidate = candidateCommandService.handle(command);
         if (candidate.isEmpty()) return ResponseEntity.badRequest().build();
         var candidateResource = CandidateResourceFromEntityAssembler.toResourceFromEntity(candidate.get());
