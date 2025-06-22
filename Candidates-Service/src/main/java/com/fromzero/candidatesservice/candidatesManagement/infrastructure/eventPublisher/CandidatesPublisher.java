@@ -1,5 +1,6 @@
 package com.fromzero.candidatesservice.candidatesManagement.infrastructure.eventPublisher;
 
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.ChatRoomCreatedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent;
 import org.springframework.jms.core.JmsTemplate;
@@ -19,6 +20,10 @@ public class CandidatesPublisher {
 
     public void publishApplied(DeveloperAppliedEvent event) {
         jmsTemplate.convertAndSend("developer.applied", event);
+    }
+
+    public void publishChatRoomCreatedEvent(ChatRoomCreatedEvent event) {
+        jmsTemplate.convertAndSend("chat.created", event);
     }
 
 }

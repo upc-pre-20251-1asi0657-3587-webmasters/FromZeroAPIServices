@@ -2,7 +2,7 @@ package com.fromzero.candidatesservice.candidatesManagement.domain.model.command
 
 import java.util.UUID;
 
-public record SelectCandidateByDeveloperIdCommand(UUID developerId, Long projectId) {
+public record SelectCandidateByDeveloperIdCommand(UUID developerId, Long projectId, String ownerId) {
 
     public SelectCandidateByDeveloperIdCommand {
         if (developerId == null || projectId == null) {
