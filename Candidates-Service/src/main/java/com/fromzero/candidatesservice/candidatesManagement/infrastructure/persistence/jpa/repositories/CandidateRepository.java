@@ -14,5 +14,7 @@ public interface CandidateRepository extends JpaRepository<Candidate, UUID> {
 
     boolean existsByProjectIdAndDeveloperId(Long projectId, UUID developerId);
 
+    Optional<Candidate> findByDeveloperIdAndProjectId(UUID developerId, Long projectId);
+
     Optional<Candidate> findCandidateByProjectIdAndDeveloperId(Long projectId, UUID developerId);
 }

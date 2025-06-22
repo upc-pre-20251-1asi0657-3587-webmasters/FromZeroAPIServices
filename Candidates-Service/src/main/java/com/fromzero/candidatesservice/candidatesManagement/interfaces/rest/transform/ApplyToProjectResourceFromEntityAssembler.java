@@ -7,6 +7,6 @@ import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.resou
 public class ApplyToProjectResourceFromEntityAssembler {
 
     public static ApplyToProjectResource toResourceFromEntity (Candidate entity) {
-        return new ApplyToProjectResource(entity.getDeveloperId(), entity.getFirstName(), entity.getLastName(), entity.getDescription());
+        return new ApplyToProjectResource(entity.getDeveloperId());
     }
 }

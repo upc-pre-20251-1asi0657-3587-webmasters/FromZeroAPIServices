@@ -3,5 +3,5 @@ package com.example.projectservice.projects.domain.model.queries;
 
 
 
-public record GetAllProjectsByDeveloperIdQuery(Long developer) {
+public record GetAllProjectsByDeveloperIdQuery(String developerId) {
 }

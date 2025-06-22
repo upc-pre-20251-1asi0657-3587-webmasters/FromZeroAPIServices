@@ -1,5 +1,6 @@
 package com.fromzero.candidatesservice.candidatesManagement.application.internal.commandservices;
 
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateByDeveloperIdCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.aggregates.Candidate;
@@ -54,8 +55,8 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
 
     //TODO: Hay que pasar la actualización del estado de un proyecto cuando se selecciona un candidato
     @Override
-    public Optional<Candidate> handle(SelectCandidateCommand command) {
-        var candidate = candidateRepository.findById(command.candidateId())
+    public Optional<Candidate> handle(SelectCandidateByDeveloperIdCommand command) {
+        var candidate = candidateRepository.findByDeveloperIdAndProjectId(command.developerId(), command.projectId())
                 .orElseThrow(() -> new IllegalArgumentException("Candidate not found"));
 
         if (!Objects.equals(candidate.getProjectId(), command.projectId())) {
@@ -78,4 +79,6 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
 
         return Optional.of(candidate);
     }
+
+
 }

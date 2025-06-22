@@ -23,7 +23,7 @@ public class DeveloperSelectedListener {
                 .orElseThrow(() -> new IllegalArgumentException("Project not found with ID: " + event.getProjectId()));
 
 
-        project.setDeveloper(event.getCandidateId());
+        project.setDeveloper(event.getDeveloperId());
         project.setState(ProjectStateEnum.IN_PROCESS);
 
         projectRepository.save(project);
