@@ -83,8 +83,10 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
         event1.setProjectId(candidate.getProjectId());
         event1.setDeveloperId(candidate.getDeveloperId());
         event1.setOwnerId(UUID.fromString(command.ownerId()));
+        event1.setProjectName(command.projectName());
+        event1.setOwnerImgUrl(command.ownerImgUrl());
+        System.out.println("Publishing chat room created event: " + event1);
         candidatesPublisher.publishChatRoomCreatedEvent(event1);
-
 
         return Optional.of(candidate);
     }

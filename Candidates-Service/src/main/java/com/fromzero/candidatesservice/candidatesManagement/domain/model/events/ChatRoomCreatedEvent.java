@@ -10,6 +10,8 @@ public class ChatRoomCreatedEvent {
     Long projectId;
     UUID ownerId;
     UUID developerId;
+    String projectName;
+    String ownerImgUrl;
 
     public ChatRoomCreatedEvent() {
     }
@@ -36,5 +38,21 @@ public class ChatRoomCreatedEvent {
 
     public void setDeveloperId(UUID developerId) {
         this.developerId = developerId;
+    }
+
+    public String getOwnerImgUrl() {
+        return ownerImgUrl;
+    }
+
+    public void setOwnerImgUrl(String ownerImgUrl) {
+        this.ownerImgUrl = ownerImgUrl;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 }

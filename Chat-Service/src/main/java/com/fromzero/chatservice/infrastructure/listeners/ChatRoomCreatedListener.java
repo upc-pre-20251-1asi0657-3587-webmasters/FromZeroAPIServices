@@ -19,7 +19,7 @@ public class ChatRoomCreatedListener {
     public void listen(ChatRoomCreatedEvent event) {
         try {
             System.out.println("Evento recibido: " + event);
-            var chatCommand = new CreateChatCommand(event.getProjectId(), event.getOwnerId(), event.getDeveloperId());
+            var chatCommand = new CreateChatCommand(event.getProjectId(), event.getOwnerId(), event.getDeveloperId(), event.getProjectName(), event.getOwnerImgUrl());
 
             var chat =  new Chat(chatCommand);
 

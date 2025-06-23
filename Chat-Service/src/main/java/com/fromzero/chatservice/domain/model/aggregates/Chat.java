@@ -24,6 +24,12 @@ public class Chat extends AuditableAbstractAggregateRoot<Chat> {
     private UUID user2Id;
 
     @Column (nullable = false)
+    private String projectName;
+
+    @Column (nullable = false)
+    private String ownerImgUrl;
+
+    @Column (nullable = false)
     private boolean closed = false;
 
     public Chat() {}
@@ -32,6 +38,8 @@ public class Chat extends AuditableAbstractAggregateRoot<Chat> {
         this.projectId = command.projectId();
         this.user1Id = command.user1();
         this.user2Id = command.user2();
+        this.projectName = command.projectName();
+        this.ownerImgUrl = command.ownerImgUrl();
         this.closed = false;
     }
 
@@ -65,5 +73,21 @@ public class Chat extends AuditableAbstractAggregateRoot<Chat> {
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getOwnerImgUrl() {
+        return ownerImgUrl;
+    }
+
+    public void setOwnerImgUrl(String ownerImgUrl) {
+        this.ownerImgUrl = ownerImgUrl;
     }
 }

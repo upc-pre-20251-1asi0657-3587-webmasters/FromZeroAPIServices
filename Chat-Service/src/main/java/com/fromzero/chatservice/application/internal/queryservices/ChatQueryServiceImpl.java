@@ -8,7 +8,9 @@ import com.fromzero.chatservice.domain.services.ChatQueryService;
 import com.fromzero.chatservice.infrastructure.persistence.repository.ChatRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ChatQueryServiceImpl implements ChatQueryService {
@@ -27,6 +29,11 @@ public class ChatQueryServiceImpl implements ChatQueryService {
     @Override
     public Boolean handle(ValidateUserAndProject validateUserAndProject) {
         return chatRepository.existsByProjectIdAndUserId(validateUserAndProject.projectId(), validateUserAndProject.userId());
+    }
+
+    @Override
+    public Optional<List<Chat>> getChatsByUserId(UUID userId) {
+        return chatRepository.findAllByUser1IdOrUser2Id(userId);
     }
 
 
