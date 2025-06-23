@@ -15,7 +15,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "chat_message")
 @AllArgsConstructor
-@NoArgsConstructor
 public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
 
     @Column(nullable = false)
@@ -58,6 +57,10 @@ public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
         this.sender = sender;
         this.type = type;
         this.content = content;
+    }
+
+    public ChatMessage() {
+
     }
 
     @Override
