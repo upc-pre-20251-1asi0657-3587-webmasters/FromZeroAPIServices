@@ -19,6 +19,7 @@ public class CandidatesPublisher {
     }
 
     public void publishApplied(DeveloperAppliedEvent event) {
+
         jmsTemplate.convertAndSend("developer.applied", event);
     }
 

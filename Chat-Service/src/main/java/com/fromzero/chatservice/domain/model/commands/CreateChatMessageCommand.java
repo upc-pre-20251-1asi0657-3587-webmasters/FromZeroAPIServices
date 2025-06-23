@@ -9,7 +9,7 @@ import java.util.UUID;
 public record CreateChatMessageCommand(
         String content,
         String sender,
-        UUID projectId,
+        Long projectId,
         UUID senderId,
         MessageType type,
         Instant timestamp

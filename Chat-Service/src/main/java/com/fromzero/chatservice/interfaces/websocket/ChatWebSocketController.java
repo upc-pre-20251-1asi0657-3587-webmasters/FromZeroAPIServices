@@ -38,7 +38,7 @@ public class ChatWebSocketController {
     @MessageMapping("/chat.sendMessage.{projectId}")
     @SendTo("/topic/project/{projectId}")
     public ChatMessage sendMessage(
-            @DestinationVariable UUID projectId,
+            @DestinationVariable Long projectId,
             @Payload ChatMessage chatMessage
     ) {
         var chatMessageCommand = new CreateChatMessageCommand(
@@ -67,7 +67,7 @@ public class ChatWebSocketController {
 
     @MessageMapping("/chat.join.{projectId}")
     public void joinRoom(
-            @DestinationVariable UUID projectId,
+            @DestinationVariable Long projectId,
             @Payload ChatJoinMessage joinMessage,
             SimpMessageHeaderAccessor headerAccessor
     ) {

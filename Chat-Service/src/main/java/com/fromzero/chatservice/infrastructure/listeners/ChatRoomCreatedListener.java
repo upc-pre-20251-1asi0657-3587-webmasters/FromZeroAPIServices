@@ -15,11 +15,18 @@ public class ChatRoomCreatedListener {
         this.chatRepository = chatRepository;
     }
 
-    @JmsListener(destination = "chat.created")
+    @JmsListener(destination = "chat.created", containerFactory = "topicListenerFactory")
     public void listen(ChatRoomCreatedEvent event) {
-        //this.chatRepository.save(new Chat(new CreateChatCommand(event.getProjectId(), event.getOwnerId(), event.getDeveloperId())));
-        System.out.println("Chat room created for project ID: " + event.getProjectId() +
-                ", Owner ID: " + event.getOwnerId() +
-                ", Developer ID: " + event.getDeveloperId());
+        try {
+            System.out.println("Evento recibido: " + event);
+            var chatCommand = new CreateChatCommand(event.getProjectId(), event.getOwnerId(), event.getDeveloperId());
+
+            var chat =  new Chat(chatCommand);
+
+            this.chatRepository.save(chat);
+        } catch (Exception e) {
+            System.err.println("Error al recibir el evento: " + e.getMessage());
+            return;
+        }
     }
 }

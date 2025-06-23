@@ -12,11 +12,10 @@ import java.util.UUID;
 
 @Entity
 @Table(name = "chats")
-@NoArgsConstructor
 public class Chat extends AuditableAbstractAggregateRoot<Chat> {
 
-    @Column (columnDefinition = "UUID", nullable = false, unique = true)
-    private UUID projectId;
+    @Column (nullable = false, unique = true)
+    private Long projectId;
 
     @Column (columnDefinition = "UUID", nullable = false)
     private UUID user1Id;
@@ -27,6 +26,8 @@ public class Chat extends AuditableAbstractAggregateRoot<Chat> {
     @Column (nullable = false)
     private boolean closed = false;
 
+    public Chat() {}
+
     public Chat(CreateChatCommand command) {
         this.projectId = command.projectId();
         this.user1Id = command.user1();
@@ -34,11 +35,11 @@ public class Chat extends AuditableAbstractAggregateRoot<Chat> {
         this.closed = false;
     }
 
-    public UUID getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(UUID projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 
