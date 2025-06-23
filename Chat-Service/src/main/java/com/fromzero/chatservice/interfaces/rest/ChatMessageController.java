@@ -16,7 +16,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value="/api/v1/chat-messages", produces = MediaType.APPLICATION_JSON_VALUE)
 @Tag(name = "Chat Messages", description = "Available chat message endpoints")
-public class ChatMessageController {
+public class  ChatMessageController {
     private final ChatMessageQueryService chatMessageQueryService;
 
     public ChatMessageController(ChatMessageQueryService chatMessageQueryService) {
@@ -25,7 +25,7 @@ public class ChatMessageController {
 
     @GetMapping("/messages/{projectId}")
     public ResponseEntity<Optional<Page<ChatMessage>>> getMessages(
-            @PathVariable UUID projectId,
+            @PathVariable Long projectId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "20") int size
     ) {
