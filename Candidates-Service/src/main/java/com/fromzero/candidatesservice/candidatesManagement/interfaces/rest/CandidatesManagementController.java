@@ -2,11 +2,11 @@ package com.fromzero.candidatesservice.candidatesManagement.interfaces.rest;
 
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.ApplyToProjectCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateByDeveloperIdCommand;
-import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.queries.GetAllCandidatesByProjectIdQuery;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateCommandService;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateQueryService;
-import com.fromzero.candidatesservice.candidatesManagement.infrastructure.clients.DeveloperClient;
+import com.fromzero.candidatesservice.candidatesManagement.infrastructure.clients.UserClient;
+import com.fromzero.candidatesservice.candidatesManagement.infrastructure.clients.ProjectClient;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.resources.ApplyToProjectResource;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.resources.CandidateResource;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.transform.CandidateResourceFromEntityAssembler;
@@ -29,13 +29,15 @@ public class CandidatesManagementController {
 
     private final CandidateCommandService candidateCommandService;
     private final CandidateQueryService candidateQueryService;
-    private final DeveloperClient developerClient;
+    private final UserClient userClient;
+    private final ProjectClient projectClient;
 
     public CandidatesManagementController(CandidateCommandService candidateCommandService,
-                                          CandidateQueryService candidateQueryService, DeveloperClient developerClient) {
+                                          CandidateQueryService candidateQueryService, UserClient userClient, ProjectClient projectClient) {
         this.candidateCommandService = candidateCommandService;
         this.candidateQueryService = candidateQueryService;
-        this.developerClient = developerClient;
+        this.userClient = userClient;
+        this.projectClient = projectClient;
     }
 
     @Operation(summary = "Get all candidates by projectId")
@@ -54,7 +56,11 @@ public class CandidatesManagementController {
     @Operation(summary = "Select a candidate for a project")
     @PatchMapping("/project/{projectId}/candidate/{developerId}/select")
     public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID developerId) {
-        var command = new SelectCandidateByDeveloperIdCommand(developerId, projectId);
+        var project = projectClient.getProjectById(projectId);
+        var enterprise = userClient.getEnterpriseById(project.ownerId());
+
+        System.out.println(enterprise + "Controller enterprise getter");
+        var command = new SelectCandidateByDeveloperIdCommand(developerId, projectId, project.ownerId(), project.name(), enterprise.profileImgUrl());
         var candidate = candidateCommandService.handle(command);
         if (candidate.isEmpty()) return ResponseEntity.badRequest().build();
         var candidateResource = CandidateResourceFromEntityAssembler.toResourceFromEntity(candidate.get());
@@ -66,7 +72,7 @@ public class CandidatesManagementController {
     public ResponseEntity<CandidateResource> applyToProject(@PathVariable Long projectId,
                                                             @RequestBody ApplyToProjectResource resource) {
 
-        var dev = developerClient.getDeveloperById(resource.developerId().toString());
+        var dev = userClient.getDeveloperById(resource.developerId().toString());
 
         var command = new ApplyToProjectCommand(
                 dev.id(),

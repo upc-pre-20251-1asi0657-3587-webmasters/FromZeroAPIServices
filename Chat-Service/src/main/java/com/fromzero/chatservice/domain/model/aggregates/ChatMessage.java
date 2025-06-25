@@ -15,7 +15,6 @@ import java.util.UUID;
 @Entity
 @Table(name = "chat_message")
 @AllArgsConstructor
-@NoArgsConstructor
 public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
 
     @Column(nullable = false)
@@ -24,8 +23,8 @@ public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
     @Column(nullable = false)
     private String sender;
 
-    @Column(columnDefinition = "UUID", nullable = false)
-    private UUID projectId;
+    @Column(nullable = false)
+    private Long projectId;
 
     @Column(columnDefinition = "UUID", nullable = false)
     @JsonProperty("senderId")
@@ -60,6 +59,10 @@ public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
         this.content = content;
     }
 
+    public ChatMessage() {
+
+    }
+
     @Override
     public String toString() {
         return "ChatMessage{" +
@@ -86,11 +89,11 @@ public class ChatMessage extends AuditableAbstractAggregateRoot<ChatMessage> {
         this.sender = sender;
     }
 
-    public UUID getProjectId() {
+    public Long getProjectId() {
         return projectId;
     }
 
-    public void setProjectId(UUID projectId) {
+    public void setProjectId(Long projectId) {
         this.projectId = projectId;
     }
 

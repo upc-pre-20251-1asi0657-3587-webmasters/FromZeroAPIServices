@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
 import java.util.UUID;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID>, PagingAndSortingRepository<ChatMessage, UUID> {
-    Page<ChatMessage> findByProjectIdOrderByTimestampDesc(UUID projectId, Pageable pageable);
+    Page<ChatMessage> findByProjectIdOrderByTimestampAsc(Long projectId, Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package com.fromzero.candidatesservice.candidatesManagement.application.internal.commandservices;
 
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateByDeveloperIdCommand;
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.ChatRoomCreatedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperAppliedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.events.DeveloperSelectedEvent;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.aggregates.Candidate;
@@ -13,12 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class CandidatesManagementCommandServiceImpl implements CandidateCommandService {
 
     private final CandidateRepository candidateRepository;
     private final CandidatesPublisher candidatesPublisher;
+
 
     public CandidatesManagementCommandServiceImpl(CandidateRepository candidateRepository, CandidatesPublisher candidatesPublisher) {
         this.candidateRepository = candidateRepository;
@@ -76,6 +79,14 @@ public class CandidatesManagementCommandServiceImpl implements CandidateCommandS
         event.setProjectId(candidate.getProjectId());
         candidatesPublisher.publishSelected(event);
 
+        ChatRoomCreatedEvent event1 = new ChatRoomCreatedEvent();
+        event1.setProjectId(candidate.getProjectId());
+        event1.setDeveloperId(candidate.getDeveloperId());
+        event1.setOwnerId(UUID.fromString(command.ownerId()));
+        event1.setProjectName(command.projectName());
+        event1.setOwnerImgUrl(command.ownerImgUrl());
+        System.out.println("Publishing chat room created event: " + event1);
+        candidatesPublisher.publishChatRoomCreatedEvent(event1);
 
         return Optional.of(candidate);
     }

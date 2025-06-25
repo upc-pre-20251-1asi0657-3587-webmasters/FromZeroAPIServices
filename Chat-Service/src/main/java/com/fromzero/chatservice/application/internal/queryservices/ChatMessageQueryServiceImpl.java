@@ -24,7 +24,7 @@ public class ChatMessageQueryServiceImpl implements ChatMessageQueryService {
     public Optional<Page<ChatMessage>> handle(PaginatedChatMessageQuery paginatedChatMessageQuery) {
         Pageable pageable = PageRequest.of(paginatedChatMessageQuery.page(), paginatedChatMessageQuery.size());
 
-        Page<ChatMessage> chatMessagesPage = chatMessageRepository.findByProjectIdOrderByTimestampDesc(paginatedChatMessageQuery.projectId(), pageable);
+        Page<ChatMessage> chatMessagesPage = chatMessageRepository.findByProjectIdOrderByTimestampAsc(paginatedChatMessageQuery.projectId(), pageable);
 
         return Optional.of(chatMessagesPage);
     }

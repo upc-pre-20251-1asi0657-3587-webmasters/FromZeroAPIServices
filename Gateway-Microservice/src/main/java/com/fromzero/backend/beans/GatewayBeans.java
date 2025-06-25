@@ -77,6 +77,14 @@ public class GatewayBeans {
                         .path("/api/v1/authentication/**")
                         .uri("lb://Auth-Service")
                 )
+                .route(route -> route
+                        .path("/api/v1/chats/**")
+                        .uri("lb://Chat-Service")
+                )
+                .route(route -> route
+                        .path("/api/v1/chat-messages/**")
+                        .uri("lb://Chat-Service")
+                )
                 .build();
     }
 }
