@@ -70,4 +70,84 @@ public class Enterprise {
         this.enterpriseSector = updateEnterpriseCommand.enterpriseSector();
         return this;
     }
+
+    public EnterpriseId getEnterpriseId() {
+        return enterpriseId;
+    }
+
+    public void setEnterpriseId(EnterpriseId enterpriseId) {
+        this.enterpriseId = enterpriseId;
+    }
+
+    public EnterpriseName getEnterpriseName() {
+        return enterpriseName;
+    }
+
+    public void setEnterpriseName(EnterpriseName enterpriseName) {
+        this.enterpriseName = enterpriseName;
+    }
+
+    public EnterpriseEmail getEnterpriseEmail() {
+        return enterpriseEmail;
+    }
+
+    public void setEnterpriseEmail(EnterpriseEmail enterpriseEmail) {
+        this.enterpriseEmail = enterpriseEmail;
+    }
+
+    public EnterpriseDescription getEnterpriseDescription() {
+        return enterpriseDescription;
+    }
+
+    public void setEnterpriseDescription(EnterpriseDescription enterpriseDescription) {
+        this.enterpriseDescription = enterpriseDescription;
+    }
+
+    public EnterpriseCountry getEnterpriseCountry() {
+        return enterpriseCountry;
+    }
+
+    public void setEnterpriseCountry(EnterpriseCountry enterpriseCountry) {
+        this.enterpriseCountry = enterpriseCountry;
+    }
+
+    public EnterpriseRuc getEnterpriseRuc() {
+        return enterpriseRuc;
+    }
+
+    public void setEnterpriseRuc(EnterpriseRuc enterpriseRuc) {
+        this.enterpriseRuc = enterpriseRuc;
+    }
+
+    public EnterprisePhone getEnterprisePhone() {
+        return enterprisePhone;
+    }
+
+    public void setEnterprisePhone(EnterprisePhone enterprisePhone) {
+        this.enterprisePhone = enterprisePhone;
+    }
+
+    public EnterpriseWebsite getEnterpriseWebsite() {
+        return enterpriseWebsite;
+    }
+
+    public void setEnterpriseWebsite(EnterpriseWebsite enterpriseWebsite) {
+        this.enterpriseWebsite = enterpriseWebsite;
+    }
+
+    public EnterpriseProfileImgUrl getEnterpriseProfileImgUrl() {
+        return enterpriseProfileImgUrl;
+    }
+
+    public void setEnterpriseProfileImgUrl(EnterpriseProfileImgUrl enterpriseProfileImgUrl) {
+        this.enterpriseProfileImgUrl = enterpriseProfileImgUrl;
+    }
+
+    public EnterpriseSector getEnterpriseSector() {
+        return enterpriseSector;
+    }
+
+    public void setEnterpriseSector(EnterpriseSector enterpriseSector) {
+        this.enterpriseSector = enterpriseSector;
+    }
 }

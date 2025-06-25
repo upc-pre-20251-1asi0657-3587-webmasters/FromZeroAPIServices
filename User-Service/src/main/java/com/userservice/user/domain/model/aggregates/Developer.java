@@ -70,4 +70,84 @@ public class Developer {
         this.developerProfileImgUrl = updateDeveloperCommand.developerProfileImgUrl();
         return this;
     }
+
+    public DeveloperId getDeveloperId() {
+        return developerId;
+    }
+
+    public void setDeveloperId(DeveloperId developerId) {
+        this.developerId = developerId;
+    }
+
+    public DeveloperFirstName getDeveloperFirstName() {
+        return developerFirstName;
+    }
+
+    public void setDeveloperFirstName(DeveloperFirstName developerFirstName) {
+        this.developerFirstName = developerFirstName;
+    }
+
+    public DeveloperLastName getDeveloperLastName() {
+        return developerLastName;
+    }
+
+    public void setDeveloperLastName(DeveloperLastName developerLastName) {
+        this.developerLastName = developerLastName;
+    }
+
+    public DeveloperEmail getDeveloperEmail() {
+        return developerEmail;
+    }
+
+    public void setDeveloperEmail(DeveloperEmail developerEmail) {
+        this.developerEmail = developerEmail;
+    }
+
+    public DeveloperDescription getDeveloperDescription() {
+        return developerDescription;
+    }
+
+    public void setDeveloperDescription(DeveloperDescription developerDescription) {
+        this.developerDescription = developerDescription;
+    }
+
+    public DeveloperPhone getDeveloperPhone() {
+        return developerPhone;
+    }
+
+    public void setDeveloperPhone(DeveloperPhone developerPhone) {
+        this.developerPhone = developerPhone;
+    }
+
+    public DeveloperCountry getDeveloperCountry() {
+        return developerCountry;
+    }
+
+    public void setDeveloperCountry(DeveloperCountry developerCountry) {
+        this.developerCountry = developerCountry;
+    }
+
+    public DeveloperCompletedProjects getDeveloperCompletedProjects() {
+        return developerCompletedProjects;
+    }
+
+    public void setDeveloperCompletedProjects(DeveloperCompletedProjects developerCompletedProjects) {
+        this.developerCompletedProjects = developerCompletedProjects;
+    }
+
+    public DeveloperSpecialties getDeveloperSpecialties() {
+        return developerSpecialties;
+    }
+
+    public void setDeveloperSpecialties(DeveloperSpecialties developerSpecialties) {
+        this.developerSpecialties = developerSpecialties;
+    }
+
+    public DeveloperProfileImgUrl getDeveloperProfileImgUrl() {
+        return developerProfileImgUrl;
+    }
+
+    public void setDeveloperProfileImgUrl(DeveloperProfileImgUrl developerProfileImgUrl) {
+        this.developerProfileImgUrl = developerProfileImgUrl;
+    }
 }

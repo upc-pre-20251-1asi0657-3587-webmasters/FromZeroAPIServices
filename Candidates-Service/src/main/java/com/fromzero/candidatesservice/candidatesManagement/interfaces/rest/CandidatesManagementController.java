@@ -1,10 +1,12 @@
 package com.fromzero.candidatesservice.candidatesManagement.interfaces.rest;
 
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.ApplyToProjectCommand;
-import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateCommand;
+import com.fromzero.candidatesservice.candidatesManagement.domain.model.commands.SelectCandidateByDeveloperIdCommand;
 import com.fromzero.candidatesservice.candidatesManagement.domain.model.queries.GetAllCandidatesByProjectIdQuery;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateCommandService;
 import com.fromzero.candidatesservice.candidatesManagement.domain.services.CandidateQueryService;
+import com.fromzero.candidatesservice.candidatesManagement.infrastructure.clients.UserClient;
+import com.fromzero.candidatesservice.candidatesManagement.infrastructure.clients.ProjectClient;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.resources.ApplyToProjectResource;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.resources.CandidateResource;
 import com.fromzero.candidatesservice.candidatesManagement.interfaces.rest.transform.CandidateResourceFromEntityAssembler;
@@ -27,11 +29,15 @@ public class CandidatesManagementController {
 
     private final CandidateCommandService candidateCommandService;
     private final CandidateQueryService candidateQueryService;
+    private final UserClient userClient;
+    private final ProjectClient projectClient;
 
     public CandidatesManagementController(CandidateCommandService candidateCommandService,
-                                          CandidateQueryService candidateQueryService) {
+                                          CandidateQueryService candidateQueryService, UserClient userClient, ProjectClient projectClient) {
         this.candidateCommandService = candidateCommandService;
         this.candidateQueryService = candidateQueryService;
+        this.userClient = userClient;
+        this.projectClient = projectClient;
     }
 
     @Operation(summary = "Get all candidates by projectId")
@@ -48,9 +54,13 @@ public class CandidatesManagementController {
     }
 
     @Operation(summary = "Select a candidate for a project")
-    @PatchMapping("/project/{projectId}/candidate/{candidateId}/select")
-    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID candidateId) {
-        var command = new SelectCandidateCommand(candidateId, projectId);
+    @PatchMapping("/project/{projectId}/candidate/{developerId}/select")
+    public ResponseEntity<CandidateResource> selectCandidate(@PathVariable Long projectId, @PathVariable UUID developerId) {
+        var project = projectClient.getProjectById(projectId);
+        var enterprise = userClient.getEnterpriseById(project.ownerId());
+
+        System.out.println(enterprise + "Controller enterprise getter");
+        var command = new SelectCandidateByDeveloperIdCommand(developerId, projectId, project.ownerId(), project.name(), enterprise.profileImgUrl());
         var candidate = candidateCommandService.handle(command);
         if (candidate.isEmpty()) return ResponseEntity.badRequest().build();
         var candidateResource = CandidateResourceFromEntityAssembler.toResourceFromEntity(candidate.get());
@@ -61,12 +71,15 @@ public class CandidatesManagementController {
     @PostMapping("/project/{projectId}/apply")
     public ResponseEntity<CandidateResource> applyToProject(@PathVariable Long projectId,
                                                             @RequestBody ApplyToProjectResource resource) {
+
+        var dev = userClient.getDeveloperById(resource.developerId().toString());
+
         var command = new ApplyToProjectCommand(
-                resource.developerId(),
+                dev.id(),
                 projectId,
-                resource.firstName(),
-                resource.lastName(),
-                resource.description()
+                dev.firstName(),
+                dev.lastName(),
+                dev.description()
         );
 
         var candidate = candidateCommandService.handle(command);

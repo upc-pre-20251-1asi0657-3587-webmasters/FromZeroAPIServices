@@ -120,11 +120,20 @@ public class ProjectController {
 
     @Operation(summary = "Get All Projects By Enterprise Id")
     @GetMapping(value = "/enterprise/{enterpriseUserId}")
-    public ResponseEntity<List<ProjectResource>> getAllProjectsByEnterpriseId(@PathVariable String enterpriseUserId){
-//        var enterprise = this.profileContextFacade.getEnterpriseByUserId(enterpriseUserId);
-//        if(enterprise==null) return ResponseEntity.badRequest().build();
-        var getProjectsByEnterpriseIdQuery = new GetAllProjectsByEnterpriseIdQuery(enterpriseUserId);
-        var projects =this.projectQueryService.handle(getProjectsByEnterpriseIdQuery);
+    public ResponseEntity<List<ProjectResource>> getAllProjectsByUserId(@PathVariable String enterpriseUserId) {
+        var query = new GetAllProjectsByEnterpriseIdQuery(enterpriseUserId);
+        var projects = this.projectQueryService.handle(query);
+        var projectResources = projects.stream()
+                .map(ProjectResourceFromEntityAssembler::toResourceFromEntity)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(projectResources);
+    }
+
+    @Operation(summary = "Get All Projects By Developer Id")
+    @GetMapping(value = "/developer/{developerUserId}")
+    public ResponseEntity<List<ProjectResource>> getAllProjectsByDeveloperId(@PathVariable String developerUserId) {
+        var query = new GetAllProjectsByDeveloperIdQuery(developerUserId);
+        var projects = this.projectQueryService.handle(query);
         var projectResources = projects.stream()
                 .map(ProjectResourceFromEntityAssembler::toResourceFromEntity)
                 .collect(Collectors.toList());

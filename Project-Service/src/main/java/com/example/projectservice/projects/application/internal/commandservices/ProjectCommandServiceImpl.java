@@ -87,9 +87,9 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
             throw new IllegalArgumentException("Cannot delete a completed or an in process projectId");
         }
 
-        //if the projectId have a developer working on it
+        //if the projectId have a developerId working on it
         if(project.getDeveloper() != null) {
-            throw new IllegalArgumentException("Cannot delete a projectId with an assigned developer");
+            throw new IllegalArgumentException("Cannot delete a projectId with an assigned developerId");
         }
 
 
