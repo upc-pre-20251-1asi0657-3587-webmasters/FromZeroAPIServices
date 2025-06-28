@@ -50,17 +50,17 @@ public class GatewayBeans {
                 )
                 .route(route -> route
                         .path("/api/v1/projects/**")
-                        //.filters(filter -> filter.filter(authFilter))
+                        .filters(filter -> filter.filter(authFilter))
                         .uri("lb://project-service")
                 )
                 .route(route -> route
                         .path("/api/v1/Projects/{projectId}/deliverables/**")
-                        //.filters(filter -> filter.filter(authFilter))
+                        .filters(filter -> filter.filter(authFilter))
                         .uri("lb://deliverables-service")
                 )
                 .route(route -> route
                         .path("/api/v1/candidates-management/**")
-                        //.filters(filter -> filter.filter(authFilter))
+                        .filters(filter -> filter.filter(authFilter))
                         .uri("lb://candidates-service")
                 )
                 .route(route -> route
@@ -79,10 +79,12 @@ public class GatewayBeans {
                 )
                 .route(route -> route
                         .path("/api/v1/chats/**")
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://Chat-Service")
                 )
                 .route(route -> route
                         .path("/api/v1/chat-messages/**")
+                        //.filters(filter -> filter.filter(authFilter))
                         .uri("lb://Chat-Service")
                 )
                 .build();

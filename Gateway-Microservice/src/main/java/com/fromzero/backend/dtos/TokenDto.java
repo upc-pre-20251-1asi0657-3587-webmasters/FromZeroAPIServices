@@ -10,8 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class TokenDto {
-    private Long id;
-    private String username;
+    private String id;
+    private String userEmail;
     private List<String> roles;
     private String token;
 }
