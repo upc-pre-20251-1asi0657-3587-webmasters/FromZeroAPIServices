@@ -3,6 +3,6 @@ WORKDIR /app
 
 COPY target/User-Service-1.0.0-RELEASE.jar app.jar
 
-EXPOSE 8082
+EXPOSE 9082
 
 ENTRYPOINT ["java", "-jar", "app.jar"]

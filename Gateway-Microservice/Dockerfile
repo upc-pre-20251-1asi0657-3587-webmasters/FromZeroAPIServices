@@ -8,7 +8,7 @@ WORKDIR /app
 EXPOSE 8080
 
 # Copy the application JAR file into the container
-ADD ./target/microservice-gateway-0.0.1-SNAPSHOT.jar microservice-gateway.jar
+ADD ./target/Gateway-Microservice-0.0.1-SNAPSHOT.jar microservice-gateway.jar
 
 # Define the command to run the application when the container starts
 ENTRYPOINT [ "java", "-jar", "microservice-gateway.jar" ]

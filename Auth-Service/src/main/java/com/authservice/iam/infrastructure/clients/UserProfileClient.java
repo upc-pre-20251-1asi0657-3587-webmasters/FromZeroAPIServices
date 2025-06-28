@@ -11,21 +11,22 @@ import java.util.UUID;
 
 @Service
 public class UserProfileClient implements UserProfileGateway {
-    private final RestTemplate restTemplate;
 
-    public UserProfileClient(RestTemplateBuilder builder) {
-        this.restTemplate = builder.build();
+    private final UserProfileFeignClient userProfileFeignClient;
+
+    public UserProfileClient(UserProfileFeignClient userProfileFeignClient) {
+        this.userProfileFeignClient = userProfileFeignClient;
     }
 
     @Override
     public void createDeveloperProfile(UUID uuid, String email, String firstName, String lastName) {
         var request = new CreateDeveloperRequest(uuid, email, firstName, lastName);
-        restTemplate.postForEntity("http://localhost:9082/api/v1/developers/new-developer", request, Void.class);
+        userProfileFeignClient.createDeveloperProfile(request);
     }
 
     @Override
     public void createEnterpriseProfile(UUID uuid, String email, String enterpriseName) {
         var request = new CreateEnterpriseRequest(uuid, email, enterpriseName);
-        restTemplate.postForEntity("http://localhost:9082/api/v1/enterprise/new-enterprise", request, Void.class);
+        userProfileFeignClient.createEnterpriseProfile(request);
     }
 }
