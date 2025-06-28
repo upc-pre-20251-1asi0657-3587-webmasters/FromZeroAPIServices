@@ -23,6 +23,25 @@ services:
     networks:
       - fromzeroapi
 
+  activemq:
+    image: apache/activemq-artemis:latest
+    container_name: activemq
+    restart: always
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    environment:
+      - ARTEMIS_USER=artemis
+      - ARTEMIS_PASSWORD=admin
+    networks:
+      - fromzeroapi
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8161/console" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
   eurekaservice:
     build: ../../Eureka-Service
     container_name: eurekaservice
@@ -49,11 +68,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      activemq:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/authdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
       EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
     networks:
       - fromzeroapi
 
@@ -65,11 +87,14 @@ services:
     depends_on:
       mysql:
         condition: service_healthy
+      activemq:
+        condition: service_healthy
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/usersdb
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
       EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
     networks:
       - fromzeroapi
 
@@ -102,6 +127,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
       EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
     networks:
       - fromzeroapi
 
@@ -118,6 +144,7 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: webmaster123
       EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
     networks:
       - fromzeroapi
 
