@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
-import javax.swing.text.html.Option;
 import java.io.IOException;
-import java.util.Optional;
 import java.util.UUID;
 
 
@@ -30,7 +28,6 @@ public class EventsListener {
     @Autowired
     private AccountRepository internalUserEmailRepository;
 
-    @Autowired
     private ProjectServiceClient projectServiceClient;
 
 

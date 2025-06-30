@@ -3,9 +3,7 @@ package com.authservice.iam.infrastructure.clients;
 import com.authservice.iam.application.ports.output.UserProfileGateway;
 import com.authservice.iam.interfaces.messaging.events.CreateDeveloperRequest;
 import com.authservice.iam.interfaces.messaging.events.CreateEnterpriseRequest;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 

@@ -6,6 +6,7 @@ import com.example.projectservice.projects.domain.model.commands.DeleteProjectCo
 import com.example.projectservice.projects.domain.model.commands.UpdateProjectProgressCommand;
 import com.example.projectservice.projects.domain.services.ProjectCommandService;
 import com.example.projectservice.projects.domain.valueobjects.ProjectStateEnum;
+import com.example.projectservice.projects.infrastructure.client.DeliverablesClient;
 import com.example.projectservice.projects.infrastructure.persistence.jpa.repositories.ProjectRepository;
 import com.example.projectservice.projects.interfaces.rest.resources.CreateDefaultDeliverablesResource;
 
@@ -13,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
-import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -21,11 +21,11 @@ import java.util.Optional;
 public class ProjectCommandServiceImpl implements ProjectCommandService {
 
     private final ProjectRepository projectRepository;
-    private final RestTemplate restTemplate;
+    private final DeliverablesClient deliverablesClient;
 
-    public ProjectCommandServiceImpl(ProjectRepository projectRepository, RestTemplate restTemplate) {
+    public ProjectCommandServiceImpl(ProjectRepository projectRepository, DeliverablesClient deliverablesClient) {
         this.projectRepository = projectRepository;
-        this.restTemplate = restTemplate;
+        this.deliverablesClient = deliverablesClient;
     }
 
     @Override
@@ -37,16 +37,11 @@ public class ProjectCommandServiceImpl implements ProjectCommandService {
         project.getLanguages().addAll(command.languages());
         project.getFrameworks().addAll(command.frameworks());
 
-
         try {
-            System.out.println("TIPO DE PROYECTO: "+project.getType());
-            System.out.println("ID DEL PROYECTO: "+project.getId());
+            CreateDefaultDeliverablesResource request =
+                    new CreateDefaultDeliverablesResource(project.getId().toString(), project.getType().toString());
 
-            String url = "http://deliverables-service/api/v1/default-deliverables";
-            CreateDefaultDeliverablesResource request = new CreateDefaultDeliverablesResource(project.getId().toString(), project.getType().toString());
-            restTemplate.postForEntity(url, request, Void.class);
-
-            System.out.println("Deliverables por defecto creados con éxito.");
+            deliverablesClient.createDefaultDeliverables(request);
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             System.err.println("HTTP Error creating default deliverables: " + e.getStatusCode() + " - " + e.getResponseBodyAsString());
         } catch (Exception e) {

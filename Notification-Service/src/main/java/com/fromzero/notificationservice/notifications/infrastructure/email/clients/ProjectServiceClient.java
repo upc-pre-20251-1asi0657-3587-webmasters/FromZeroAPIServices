@@ -1,20 +1,12 @@
 package com.fromzero.notificationservice.notifications.infrastructure.email.clients;
 
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
-@Component
-public class ProjectServiceClient {
-    private final RestTemplate restTemplate;
-    private final String projectServiceUrl;
-
-    public ProjectServiceClient(RestTemplate restTemplate, @Value("http://project-service/api/v1/") String projectServiceUrl) {
-        this.restTemplate = restTemplate;
-        this.projectServiceUrl = projectServiceUrl;
-    }
-
-    public ProjectDto getProjectById(Long projectId) {
-        return restTemplate.getForObject(projectServiceUrl + "/projects/" + projectId, ProjectDto.class);
-    }
+@FeignClient(name = "project-service")
+public interface ProjectServiceClient {
+    @GetMapping("/api/v1/projects/{id}")
+    ProjectDto getProjectById(@PathVariable("id") Long id);
 }
+
