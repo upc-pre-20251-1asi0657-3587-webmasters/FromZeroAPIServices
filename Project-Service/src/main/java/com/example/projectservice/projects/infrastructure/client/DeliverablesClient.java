@@ -5,7 +5,7 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
-@FeignClient(name = "deliverablesservice") // nombre registrado en Eureka
+@FeignClient(name = "Deliverables-Service") // nombre registrado en Eureka
 public interface DeliverablesClient {
 
     @PostMapping("/api/v1/default-deliverables")

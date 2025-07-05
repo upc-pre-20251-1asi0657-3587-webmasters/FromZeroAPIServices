@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eurekaservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eurekaservice
+  template:
+    metadata:
+      labels:
+        app: eurekaservice
+    spec:
+      containers:
+        - name: eurekaservice
+          image: us-central1-docker.pkg.dev/fromzerogcp/microservices-fromzero-repo/eurekaservice:v1
+          ports:
+            - containerPort: 8761

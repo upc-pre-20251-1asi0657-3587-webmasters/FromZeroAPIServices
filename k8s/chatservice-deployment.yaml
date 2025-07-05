@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: chatservice
+  template:
+    metadata:
+      labels:
+        app: chatservice
+    spec:
+      containers:
+        - name: chatservice
+          image: us-central1-docker.pkg.dev/fromzerogcp/microservices-fromzero-repo/chatservice:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:postgresql://34.58.48.174:5432/chatdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: postgres
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: webmasterdbposgresqlPassword!12@3!
+            - name: EUREKA_SERVER
+              value: http://eurekaservice:8761/eureka
+            - name: SPRING_ACTIVEMQ_BROKER-URL
+              value: tcp://activemq:61616

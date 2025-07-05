@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: notificationsservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: notificationsservice
+  template:
+    metadata:
+      labels:
+        app: notificationsservice
+    spec:
+      containers:
+        - name: notificationsservice
+          image: us-central1-docker.pkg.dev/fromzerogcp/microservices-fromzero-repo/notificationsservice:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://35.192.84.109:3306/notificationsdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: webmaster123
+            - name: SENDGRID_TEMPLATE_ID
+              value: ${SENDGRID_TEMPLATE_ID}
+            - name: SENDGRID_API_KEY
+              value: ${SENDGRID_API_KEY}
+            - name: EUREKA_SERVER
+              value: http://eurekaservice:8761/eureka
+            - name: SPRING_ACTIVEMQ_BROKER-URL
+              value: tcp://activemq:61616

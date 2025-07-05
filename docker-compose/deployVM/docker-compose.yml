@@ -1,0 +1,187 @@
+version: "3.8"
+
+networks:
+  fromzeroapi:
+    driver: bridge
+
+services:
+  activemq:
+    image: apache/activemq-artemis:latest
+    container_name: activemq
+    restart: always
+    ports:
+      - "61616:61616"
+      - "8161:8161"
+    environment:
+      - ARTEMIS_USER=artemis
+      - ARTEMIS_PASSWORD=admin
+    networks:
+      - fromzeroapi
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8161/console" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  eurekaservice:
+    container_name: eurekaservice
+    image: gcr.io/fromzerogcp/eurekaservice:v1
+    ports:
+      - "8761:8761"
+    environment:
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+    restart: always
+    networks:
+      - fromzeroapi
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8761/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  authservice:
+    image: gcr.io/fromzerogcp/authservice:v1
+    container_name: authservice
+    ports:
+      - "9081:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/authdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  userservice:
+    image: gcr.io/fromzerogcp/userservice:v1
+    container_name: userservice
+    ports:
+      - "9082:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/authdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  supportservice:
+    image: gcr.io/fromzerogcp/supportservice:v1
+    container_name: supportservice
+    ports:
+      - "9080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/supportticketsdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+    networks:
+      - fromzeroapi
+
+  projectsservice:
+    image: gcr.io/fromzerogcp/projectservice:v2
+    container_name: projectservice
+    ports:
+      - "9083:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/projectsdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  deliverablesservice:
+    image: gcr.io/fromzerogcp/deliverablesservice:v1
+    container_name: deliverablesservice
+    ports:
+      - "9084:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/deliverablesdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  notificationsservice:
+    image: gcr.io/fromzerogcp/notificationsservice:v1
+    container_name: notificationsservice
+    ports:
+      - "9085:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/notificationsdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      SENDGRID_TEMPLATE_ID: ${SENDGRID_TEMPLATE_ID}
+      SENDGRID_API_KEY: ${SENDGRID_API_KEY}
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  candidatesservice:
+    image: gcr.io/fromzerogcp/candidatesservice:v1
+    container_name: candidatesservice
+    ports:
+      - "9086:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://35.192.84.109:3306/candidatesdb
+      SPRING_DATASOURCE_USERNAME: fromzeroroot
+      SPRING_DATASOURCE_PASSWORD: webmasterdbmysqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  chatservice:
+    image: gcr.io/fromzerogcp/chatservice:v1
+    container_name: chatservice
+    ports:
+      - "9087:8080"
+    depends_on:
+      activemq:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://34.58.48.174:5432/chatdb
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: webmasterdbposgresqlPassword!12@3!
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+      SPRING_ACTIVEMQ_BROKER-URL: tcp://activemq:61616
+    networks:
+      - fromzeroapi
+
+  gateway:
+    image: gcr.io/fromzerogcp/gatewayservice:v1
+    container_name: gateway
+    ports:
+      - "8080:8080"
+    environment:
+      EUREKA_SERVER: http://eurekaservice:8761/eureka
+    networks:
+      - fromzeroapi
+

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deliverablesservice
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: deliverablesservice
+  template:
+    metadata:
+      labels:
+        app: deliverablesservice
+    spec:
+      containers:
+        - name: deliverablesservice
+          image: us-central1-docker.pkg.dev/fromzerogcp/microservices-fromzero-repo/deliverablesservice:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://35.192.84.109:3306/deliverablesdb
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: webmasterdbmysqlPassword!12@3!
+            - name: SPRING_ACTIVEMQ_BROKER-URL
+              value: tcp://activemq:61616
+            - name: EUREKA_SERVER
+              value: http://eurekaservice:8761/eureka
